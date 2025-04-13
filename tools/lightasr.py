@@ -1,7 +1,7 @@
 import time
 import torch
 import numpy as np
-from baseasr import BaseASR
+from tools.baseasr import BaseASR
 
 
 class LightASR(BaseASR):

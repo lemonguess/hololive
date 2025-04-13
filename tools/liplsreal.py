@@ -32,12 +32,12 @@ from threading import Thread
 import torch.multiprocessing as mp
 
 
-from lightasr import LightASR
+from tools.lightasr import LightASR
 import asyncio
 from av import AudioFrame, VideoFrame
 
-from basereal import BaseReal
-from ultralight.audio2feature import Audio2Feature
+from tools.basereal import BaseReal
+from third.ultralight.audio2feature import Audio2Feature
 from third.wav2lipls.models import Human
 
 #from imgcache import ImgCache
@@ -70,7 +70,7 @@ def load_model(path):
     return model.eval(),audio_processor
 
 def load_avatar(avatar_id):
-    avatar_path = f"./data/avatars/{avatar_id}"
+    avatar_path = f"./source/avatars/{avatar_id}"
     full_imgs_path = f"{avatar_path}/full_imgs" 
     face_imgs_path = f"{avatar_path}/face_imgs" 
     coords_path = f"{avatar_path}/coords.pkl"
@@ -226,7 +226,6 @@ class LipLsReal(BaseReal):
         #self.opt = opt # shared with the trainer's opt to support in-place modification of rendering parameters.
         self.W = opt.W
         self.H = opt.H
-
         self.fps = opt.fps # 20 ms per frame
         
         self.batch_size = opt.batch_size
