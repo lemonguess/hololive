@@ -1,8 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, JSON
 from datetime import datetime
 from models.base import Base
-
-
+from models.enums import IntEnum, UserRoleType
 
 
 class BaseSupplierModel(Base):
@@ -21,9 +20,9 @@ class UsersModel(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     user_uuid = Column(String(255), unique=True, nullable=False)
-    role = Column(Integer)
+    role = Column(IntEnum(UserRoleType), nullable=False)  # 修改为 UserRoleType 枚举类型
     password = Column(String(255), nullable=False)
-    email = Column(String(255), unique=True, nullable=False)
+    email = Column(String(255), unique=True)
     nickname = Column(String(255), nullable=False)
     avatar = Column(Text)
     phone_num = Column(String(255))
@@ -32,6 +31,7 @@ class UsersModel(Base):
     is_deleted = Column(Integer, default=0)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)
+
 
 class UserSupplierModel(Base):
     """用户供应商管理表"""
@@ -91,4 +91,3 @@ class TTSConfigModel(Base):
     configs = Column(JSON)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-

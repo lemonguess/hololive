@@ -22,6 +22,7 @@
 - description => text,
 - update_time => datetime,
 - create_time => datetime,
+- 
 2.用户的供应商管理
 - id => int,
 - user_uuid => varchar(255),
@@ -30,6 +31,7 @@
 - api_key => text,
 - update_time => datetime,
 - create_time => datetime,
+- 
 3.LLM 管理
 - id => int,
 - llm_uuid => varchar(255),
@@ -40,6 +42,7 @@
 - context_length => int,
 - update_time => datetime,
 - create_time => datetime,
+- 
 4.智能体配置管理
 - id => int,
 - agent_uuid => varchar(255),

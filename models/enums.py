@@ -1,4 +1,20 @@
 from enum import Enum
+from sqlalchemy import TypeDecorator, Integer
+
+class IntEnum(TypeDecorator):
+    """
+    整数枚举类型 主要用于状态等场景
+    """
+    impl = Integer
+    def __init__(self, enumtype, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._enumtype = enumtype
+    def process_bind_param(self, value, dialect):
+        """入库时调用此方法，返回的是枚举的value"""
+        return value.value
+    def process_result_value(self, value, dialect):
+        """从数据库加载到内存时的值，返回的一个枚举实例"""
+        return self._enumtype(value)
 
 class TransportType(Enum):
     """推送方式"""
@@ -11,6 +27,13 @@ class TalkModelType(Enum):
     WAV2LIP = 0
     WAV2LIPLST = 1
     MUSETALK = 2
+
+class UserRoleType(Enum):
+    """用户权限角色"""
+    ADMIN = 0  # 管理员
+    USER = 1  # 普通账号
+    TEST = 2  # 测试账号
+    FORBID = 3  # 禁用账号
 
 class TTSType(Enum):
     """TTS类型"""
