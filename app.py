@@ -1,9 +1,10 @@
+import asyncio
 
 from utils.response_util import ResponseUtil
 # from core.live.api import live_router
 from core.agent.api import agent_router
 from core.users.api import users_router
-from tasks.startup_tasks import init_database, init_admin_user
+from tasks.startup_tasks import init_database, init_admin_user, init_default_provider
 from utils.log_util import LOGGING_CONF, Logger
 import uvicorn
 from fastapi import FastAPI
@@ -19,7 +20,10 @@ logger = Logger().get_logger()
 async def lifespan(app: FastAPI):
     logger.info("startup_event")
     await init_database()  # 库表初始化
-    await init_admin_user()  # 系统启动时初始化管理员账号
+    await asyncio.gather(
+        await init_admin_user(),  # 系统启动时初始化管理员账号
+        await init_default_provider() # 初始化默认模型供应商
+    )
     yield  # 启动完成
     logger.info("shutdown_event")
 

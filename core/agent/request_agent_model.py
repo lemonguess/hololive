@@ -121,30 +121,4 @@ class AgentHistoryAPIParameters(BaseModel):
     agent_uuid: Optional[str] = None
 
 
-class DelAgentHistoryAPIParameters(BaseModel):
-    agent_id: Optional[int] = None
-    user_id_list: List[str] = None
-    conversation_id_list: List[str] = None
-    agent_uuid_list: List[str] = None
 
-class AgentSettingsAddParameters(BaseModel):
-    agent_id: int
-    rule_name: str
-    conditions: Dict
-    answer_content: str
-    rule_state: int = 0
-
-
-class AgentSettingsUpdateStateParameters(BaseModel):
-    agent_id: int
-    rule_id: str
-    rule_state: int
-
-
-class AgentSettingsUpdateParameters(BaseModel):
-    agent_id: int
-    rule_id: str
-    rule_name: str
-    conditions: Dict
-    answer_content: str
-    rule_state: int = 0

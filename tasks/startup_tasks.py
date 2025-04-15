@@ -1,10 +1,13 @@
 from core.users.api import UserInterfaceInstance
+from models.model import BaseSupplierModel
 from utils import AsyncDatabaseManagerInstance
 from utils.encrypt_util import BcryptSecurity
 from models.enums import UserRoleType
 from models.base import Base
 from config import app_config
 import logging
+import json
+from pathlib import Path
 logger = logging.getLogger(__name__)
 async def init_database():
     """库表初始化"""
@@ -18,7 +21,6 @@ async def init_admin_user():
         # 检查管理员是否存在
         admin_user = await UserInterfaceInstance.get_user_by_username(session, admin_username)
         if not admin_user:
-            # 创建管理员（移除多余的manager参数）
             await UserInterfaceInstance.create_user(
                 session,
                 username=admin_username,
@@ -26,3 +28,24 @@ async def init_admin_user():
                 role=UserRoleType.ADMIN
             )
             logger.info("Admin user initialized.")
+
+async def init_default_provider(session):
+    """初始化默认供应商数据"""
+    # 异步读取默认供应商配置文件
+    config_path = 'config/default_providers.json'
+    with open(config_path, 'r', encoding='utf-8') as f:
+        providers = json.load(f)
+    # 将数据写入数据库
+    for provider in providers:
+        existing_provider = await session.execute(
+            session.query(BaseSupplierModel).filter_by(provider_uuid=provider['provider_uuid'])
+        ).first()
+        if not existing_provider:
+            new_provider = BaseSupplierModel(
+                provider_uuid=provider['provider_uuid'],
+                icon=provider.get('icon'),
+                name=provider['name'],
+                description=provider.get('description')
+            )
+            session.add(new_provider)
+    await session.commit()

@@ -116,29 +116,3 @@ async def update_user_role(params: AlterRoleAPIParameters) -> JSONResponse:
                 "data": None
             }
         )
-
-# 用户管理接口：禁用用户
-@users_router.put("/users/{user_id}/disable")
-async def disable_user(user_id: int) -> JSONResponse:
-    try:
-        async with AsyncDatabaseManagerInstance.get_session() as session:
-            await UserInterfaceInstance.disable_user(session, user_id)
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={
-                    "code": 0,
-                    "msg": "User disabled successfully.",
-                    "data": None
-                }
-            )
-    except Exception as e:
-        error_stack = traceback.format_exc()
-        logger.error(error_stack)
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "code": 1,
-                "msg": str(e),
-                "data": None
-            }
-        )
