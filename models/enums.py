@@ -22,6 +22,26 @@ class TransportType(Enum):
     WEBRTC = 1
     RTCPUSH = 2
 
+    def determine_existence_type(self, input_val):
+        """
+        判断输入值是枚举的 name 还是 value
+        :param input_val: 可以是字符串（name）或整数（value）
+        :return: 'name'、'value' 或 None
+        """
+        # 检测是否为 name
+        if isinstance(input_val, str):
+            if input_val in self.__class__.__members__:
+                return 'name'
+
+        # 检测是否为 value
+        elif isinstance(input_val, int):
+            all_values = {member.value for member in self.__class__}
+            if input_val in all_values:
+                return 'value'
+
+        # 无匹配项
+        return None
+
 class TalkModelType(Enum):
     """lips模型类别"""
     WAV2LIP = 0

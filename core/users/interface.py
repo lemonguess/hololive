@@ -47,11 +47,11 @@ class UserInterface:
         return new_user
 
     @staticmethod
-    async def delete_user(session: AsyncSession, user_id: int) -> None:
+    async def delete_user(session: AsyncSession, user_id: str) -> None:
         """原子化软删除操作"""
         await session.execute(
             update(UsersModel)
-            .where(UsersModel.id == user_id)
+            .where(UsersModel.user_uuid == user_id)
             .values(
                 is_deleted=1,
                 update_time=datetime.utcnow()
@@ -61,12 +61,12 @@ class UserInterface:
 
     @staticmethod
     async def update_user_role(session: AsyncSession,
-                             user_id: int,
+                             user_id: str,
                              role: UserRoleType) -> None:
         """角色更新（使用ORM表达式）"""
         await session.execute(
             update(UsersModel)
-            .where(UsersModel.id == user_id)
+            .where(UsersModel.user_uuid == user_id)
             .values(
                 role=role,
                 update_time=datetime.utcnow()
