@@ -8,11 +8,8 @@ from fastapi import (
 )
 import logging
 from starlette import status
-from starlette.responses import JSONResponse, StreamingResponse
+from starlette.responses import JSONResponse
 from core.agents.request_agent_model import CreateAgentAPIParameters, UpdateAgentAPIParameters, AgentChatAPIParameters
-from core.agents.interface import ProviderInterface
-from sqlalchemy.ext.asyncio import AsyncSession
-from models.model import BaseSupplierModel, UserSupplierModel
 
 logger = logging.getLogger(__name__)
 agent_router = APIRouter(prefix="/agent", tags=["agents"])

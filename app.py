@@ -11,7 +11,6 @@ from utils.log_util import LOGGING_CONF, Logger
 import uvicorn
 from middleware.jwt_middleware import JWTMiddleware
 from middleware.validation_middleware import ValidationMiddleware
-
 # 日志配置
 logger = Logger().get_logger()
 
@@ -29,9 +28,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # 添加 JWT 中间件
-app.add_middleware(JWTMiddleware)
+# app.add_middleware(JWTMiddleware)
 # 添加参数校验中间件
-app.add_middleware(ValidationMiddleware)
+# app.add_middleware(ValidationMiddleware)
 
 
 app.include_router(agent_router)

@@ -34,7 +34,7 @@ class UserInterface:
                         role: UserRoleType) -> UsersModel:
         """创建新用户（自动事务管理）"""
         new_user = UsersModel(
-            user_uuid=uuid.uuid4().hex,
+            user_uuid="571998a36f4b4ffeb2aaccc752d52bc4",
             nickname=username,
             password=password,
             role=role,

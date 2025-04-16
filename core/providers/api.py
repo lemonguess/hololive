@@ -1,5 +1,7 @@
 import traceback
 import uuid
+
+import sqlalchemy
 from fastapi import (
     FastAPI, BackgroundTasks, APIRouter
 )
@@ -10,7 +12,7 @@ from core.providers.interface import ProviderInterface
 from core.providers.request_model import *
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils import AsyncDatabaseManagerInstance
-
+from utils import Serializer
 logger = logging.getLogger(__name__)
 provider_router = APIRouter(prefix="/provider", tags=["providers"])
 @provider_router.post("/add_base_provider")
@@ -36,14 +38,14 @@ async def add_base_provider(
                     "data": provider.provider_uuid
                 }
             )
-    except Exception as e:
+    except sqlalchemy.exc.IntegrityError as e:
         error_stack = traceback.format_exc()
         logger.error(error_stack)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "code": 1,
-                "msg": str(e),
+                "msg": str(e.args),
                 "data": None
             }
         )
@@ -77,7 +79,7 @@ async def update_base_provider(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "code": 1,
-                "msg": str(e),
+                "msg": str(e.args),
                 "data": None
             }
         )
@@ -122,10 +124,7 @@ async def add_user_provider(
         async with AsyncDatabaseManagerInstance.get_session() as session:
             user_provider = await ProviderInterface.add_user_provider(
                 session=session,
-                user_uuid=params.user_uuid,
-                provider_uuid=params.provider_uuid,
-                user_provider_uuid=uuid.uuid4().hex,
-                api_key=params.api_key
+                **params.__dict__
             )
             return JSONResponse(
                 status_code=status.HTTP_201_CREATED,
@@ -142,11 +141,10 @@ async def add_user_provider(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "code": 1,
-                "msg": str(e),
+                "msg": str(e.args),
                 "data": None
             }
         )
-
 
 @provider_router.post("/update_user_provider")
 async def update_user_provider(
@@ -157,7 +155,8 @@ async def update_user_provider(
             user_provider = await ProviderInterface.update_user_provider(
                 session=session,
                 user_provider_uuid=params.user_provider_uuid,
-                api_key=params.api_key
+                api_key=params.api_key,
+                base_url=params.base_url
             )
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -167,6 +166,15 @@ async def update_user_provider(
                     "data": user_provider.user_provider_uuid
                 }
             )
+    except sqlalchemy.exc.IntegrityError:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={
+                "code": 1,
+                "msg": "修改信息重复",
+                "data": None
+            }
+        )
     except Exception as e:
         error_stack = traceback.format_exc()
         logger.error(error_stack)
@@ -174,7 +182,7 @@ async def update_user_provider(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "code": 1,
-                "msg": str(e),
+                "msg": str(e.args),
                 "data": None
             }
         )
@@ -182,22 +190,20 @@ async def update_user_provider(
 
 @provider_router.delete("/delete_user_provider")
 async def delete_user_provider(
-        user_provider_uuid: str
+        params: DeleteUserProviderAPIParameters
 ) -> JSONResponse:
     try:
-        user_uuid = ""  # todo用户 id 获取
         async with AsyncDatabaseManagerInstance.get_session() as session:
-            user_provider = await ProviderInterface.delete_user_provider(
+            await ProviderInterface.delete_user_provider(
                 session=session,
-                user_provider_uuid=user_provider_uuid,
-                user_uuid=user_uuid
+                user_provider_uuid=params.user_provider_uuid
             )
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content={
                     "code": 0,
                     "msg": "User provider deleted successfully.",
-                    "data": user_provider.user_provider_uuid
+                    "data": "ok"
                 }
             )
     except Exception as e:
@@ -207,7 +213,7 @@ async def delete_user_provider(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "code": 1,
-                "msg": str(e),
+                "msg": str(e.args),
                 "data": None
             }
         )
@@ -228,7 +234,7 @@ async def get_base_providers_by_uuids(
                 content={
                     "code": 0,
                     "msg": "Base providers fetched successfully.",
-                    "data": [provider.dict() for provider in providers]
+                    "data": [Serializer.serialize(provider) for provider in providers]
                 }
             )
     except Exception as e:
@@ -259,7 +265,7 @@ async def get_user_providers_by_uuids(
                 content={
                     "code": 0,
                     "msg": "User providers fetched successfully.",
-                    "data": [provider.dict() for provider in providers]
+                    "data": [Serializer.serialize(provider) for provider in providers]
                 }
             )
     except Exception as e:

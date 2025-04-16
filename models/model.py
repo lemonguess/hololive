@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, JSON
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, UniqueConstraint
 from datetime import datetime
 from models.base import Base
 from models.enums import IntEnum, UserRoleType
@@ -37,12 +37,17 @@ class UserSupplierModel(Base):
     """用户供应商管理表"""
     __tablename__ = 'user_suppliers'
     id = Column(Integer, primary_key=True)
-    user_uuid = Column(String(255), nullable=False)
-    provider_uuid = Column(String(255), nullable=False)  # 外键到suppliers.provider_uuid
-    user_provider_uuid = Column(String(255), unique=True, nullable=False)
+    user_uuid = Column(String(255), nullable=False)  # 确保该值在 users 表中存在
+    provider_uuid = Column(String(255), nullable=False)  # 确保该值在 base_suppliers 表中存在
+    user_provider_uuid = Column(String(255), unique=True, nullable=False)  # 确保该值是唯一的
     api_key = Column(Text, nullable=False)
+    base_url = Column(Text, nullable=False)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)
+    __table_args__ = (
+        UniqueConstraint('user_uuid', 'provider_uuid', name='uq_user_provider'),  # 确保 user_uuid 和 provider_uuid 的组合是唯一的
+    )
+
 
 class LLMModel(Base):
     """LLM模型管理表"""
