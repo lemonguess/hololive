@@ -1,8 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, UniqueConstraint
 from datetime import datetime
 from models.base import Base
-from models.enums import IntEnum, UserRoleType
-
+from models.enums import UserRoleType, ModelType, IntEnum
 
 class BaseSupplierModel(Base):
     """基础供应商管理表"""
@@ -14,6 +13,22 @@ class BaseSupplierModel(Base):
     description = Column(Text)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)
+
+
+class ModelManagementModel(Base):
+    """模型管理表"""
+    __tablename__ = 'imodel_management'
+    id = Column(Integer, primary_key=True)
+    user_provider_uuid = Column(String(255), nullable=False)  # 外键到 user_suppliers.user_provider_uuid
+    user_uuid = Column(String(255), nullable=False)
+    imodel_uuid = Column(String(255), unique=True, nullable=False)  # 模型唯一标识
+    imodel_type = Column(IntEnum(ModelType), nullable=False)  # 模型类型，使用枚举类 ModelType
+    name = Column(String(255), nullable=False)  # 模型名称
+    description = Column(Text)
+    config = Column(JSON)  # 模型配置，JSON类型
+    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 更新时间
+    create_time = Column(DateTime, default=datetime.utcnow)  # 创建时间
+
 
 class UsersModel(Base):
     """用户管理表"""
@@ -47,20 +62,6 @@ class UserSupplierModel(Base):
     __table_args__ = (
         UniqueConstraint('user_uuid', 'provider_uuid', name='uq_user_provider'),  # 确保 user_uuid 和 provider_uuid 的组合是唯一的
     )
-
-
-class LLMModel(Base):
-    """LLM模型管理表"""
-    __tablename__ = 'llms'
-    id = Column(Integer, primary_key=True)
-    llm_uuid = Column(String(255), unique=True, nullable=False)
-    user_provider_uuid = Column(String(255), nullable=False)  # 外键到user_suppliers.user_provider_uuid
-    user_uuid = Column(String(255), nullable=False)
-    name = Column(String(255), nullable=False)
-    max_tokens = Column(Integer)
-    context_length = Column(Integer)
-    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    create_time = Column(DateTime, default=datetime.utcnow)
 
 class AgentConfigModel(Base):
     """智能助手配置管理表"""

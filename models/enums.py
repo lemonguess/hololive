@@ -16,6 +16,14 @@ class IntEnum(TypeDecorator):
         """从数据库加载到内存时的值，返回的一个枚举实例"""
         return self._enumtype(value)
 
+class ModelType(Enum):
+    """模型类型枚举类"""
+    TEXT = 1  # 文本模型
+    IMAGE = 2  # 图像模型
+    AUDIO = 3  # 音频模型
+    VIDEO = 4  # 视频模型
+    MULTIMODAL = 5  # 多模态模型
+
 class TransportType(Enum):
     """推送方式"""
     RTMP = 0
