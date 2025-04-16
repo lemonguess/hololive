@@ -9,6 +9,9 @@ class JWTMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
         super().__init__(app)
         self.secret_key = app_config.jwt.JWT_SECRET_KEY
+        # 检查 JWT_ALGORITHM 是否存在
+        if not hasattr(app_config.jwt, 'JWT_ALGORITHM'):
+            raise ValueError("JWT_ALGORITHM is not configured in app_config.jwt")
         self.algorithm = app_config.jwt.JWT_ALGORITHM
 
     async def dispatch(self, request: Request, call_next):

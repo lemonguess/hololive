@@ -1,7 +1,23 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, UniqueConstraint, ForeignKey, Table
 from datetime import datetime
 from models.base import Base
 from models.enums import UserRoleType, ModelType, IntEnum
+class UsersModel(Base):
+    """用户管理表"""
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    user_uuid = Column(String(255), unique=True, nullable=False)
+    role = Column(IntEnum(UserRoleType), nullable=False)  # 修改为 UserRoleType 枚举类型
+    password = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True)
+    nickname = Column(String(255), nullable=False)
+    avatar = Column(Text)
+    phone_num = Column(String(255))
+    is_email_verified = Column(Integer, default=0)
+    is_phone_verified = Column(Integer, default=0)
+    is_deleted = Column(Integer, default=0)
+    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.utcnow)
 
 class BaseSupplierModel(Base):
     """基础供应商管理表"""
@@ -30,22 +46,7 @@ class ModelManagementModel(Base):
     create_time = Column(DateTime, default=datetime.utcnow)  # 创建时间
 
 
-class UsersModel(Base):
-    """用户管理表"""
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    user_uuid = Column(String(255), unique=True, nullable=False)
-    role = Column(IntEnum(UserRoleType), nullable=False)  # 修改为 UserRoleType 枚举类型
-    password = Column(String(255), nullable=False)
-    email = Column(String(255), unique=True)
-    nickname = Column(String(255), nullable=False)
-    avatar = Column(Text)
-    phone_num = Column(String(255))
-    is_email_verified = Column(Integer, default=0)
-    is_phone_verified = Column(Integer, default=0)
-    is_deleted = Column(Integer, default=0)
-    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    create_time = Column(DateTime, default=datetime.utcnow)
+
 
 
 class UserSupplierModel(Base):

@@ -8,16 +8,18 @@ from fastapi import (
 import logging
 from starlette import status
 from starlette.responses import JSONResponse
-from core.providers.interface import ProviderInterface
-from core.providers.schemas import *
+from core.imodels.interface import ProviderInterface
+from core.imodels.schemas import *
+from sqlalchemy.ext.asyncio import AsyncSession
 from utils import AsyncDatabaseManagerInstance
 from utils import Serializer
 logger = logging.getLogger(__name__)
-provider_router = APIRouter(prefix="/provider", tags=["providers"])
-@provider_router.post("/add_base_provider")
-async def add_base_provider(
-        params: AddBaseProviderAPIParameters
+imodel_router = APIRouter(prefix="/models", tags=["models"])
+@imodel_router.post("/add_base_model")
+async def add_base_model(
+        params: AddBaseModelAPIParameters
 ) -> JSONResponse:
+    """模型添加接口"""
     try:
         async with AsyncDatabaseManagerInstance.get_session() as session:
             item = {
@@ -50,7 +52,7 @@ async def add_base_provider(
         )
 
 
-@provider_router.post("/update_base_provider")
+@imodel_router.post("/update_base_provider")
 async def update_base_provider(
         params: UpdateBaseProviderAPIParameters
 ) -> JSONResponse:
@@ -84,7 +86,7 @@ async def update_base_provider(
         )
 
 
-@provider_router.post("/delete_base_provider")
+@imodel_router.post("/delete_base_provider")
 async def delete_base_provider(
         params: DeleteBaseProviderAPIParameters
 ) -> JSONResponse:
@@ -115,7 +117,7 @@ async def delete_base_provider(
         )
 
 
-@provider_router.post("/add_user_provider")
+@imodel_router.post("/add_user_provider")
 async def add_user_provider(
         params: AddUserProviderAPIParameters
 ) -> JSONResponse:
@@ -145,7 +147,7 @@ async def add_user_provider(
             }
         )
 
-@provider_router.post("/update_user_provider")
+@imodel_router.post("/update_user_provider")
 async def update_user_provider(
         params: UpdateUserProviderAPIParameters
 ) -> JSONResponse:
@@ -187,7 +189,7 @@ async def update_user_provider(
         )
 
 
-@provider_router.delete("/delete_user_provider")
+@imodel_router.delete("/delete_user_provider")
 async def delete_user_provider(
         params: DeleteUserProviderAPIParameters
 ) -> JSONResponse:
@@ -218,7 +220,7 @@ async def delete_user_provider(
         )
 
 
-@provider_router.post("/get_base_providers_by_uuids")
+@imodel_router.post("/get_base_providers_by_uuids")
 async def get_base_providers_by_uuids(
         params: SearchUserProviderAPIParameters
 ) -> JSONResponse:
@@ -249,7 +251,7 @@ async def get_base_providers_by_uuids(
         )
 
 
-@provider_router.post("/get_user_providers_by_uuids")
+@imodel_router.post("/get_user_providers_by_uuids")
 async def get_user_providers_by_uuids(
         params: SearchUserProviderAPIParameters
 ) -> JSONResponse:

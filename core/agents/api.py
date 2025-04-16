@@ -9,7 +9,7 @@ from fastapi import (
 import logging
 from starlette import status
 from starlette.responses import JSONResponse
-from core.agents.request_agent_model import CreateAgentAPIParameters, UpdateAgentAPIParameters, AgentChatAPIParameters
+from core.agents.schemas import CreateAgentAPIParameters, UpdateAgentAPIParameters, AgentChatAPIParameters
 
 logger = logging.getLogger(__name__)
 agent_router = APIRouter(prefix="/agent", tags=["agents"])

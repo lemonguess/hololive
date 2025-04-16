@@ -20,9 +20,10 @@ class ModelType(Enum):
     """模型类型枚举类"""
     TEXT = 1  # 文本模型
     IMAGE = 2  # 图像模型
-    AUDIO = 3  # 音频模型
-    VIDEO = 4  # 视频模型
-    MULTIMODAL = 5  # 多模态模型
+    MULTIMODAL = 3  # 多模态模型
+    TTS = 4  # TTS模型
+    ASR = 5  # ASR模型
+
 
 class TransportType(Enum):
     """推送方式"""

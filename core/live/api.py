@@ -9,7 +9,7 @@ from fastapi import (
 import logging
 from starlette import status
 from starlette.responses import JSONResponse, StreamingResponse
-from core.live.request_live_model import CreateLiveAppAPIParameters
+from core.live.schemas import CreateLiveAppAPIParameters
 from tools.liplsreal import LipLsReal
 from aiortc import RTCPeerConnection, RTCSessionDescription
 
