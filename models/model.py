@@ -25,7 +25,7 @@ class BaseSupplierModel(Base):
     id = Column(Integer, primary_key=True)
     provider_uuid = Column(String(255), unique=True, nullable=False)
     icon = Column(Text)
-    name = Column(String(255), nullable=False)
+    name = Column(String(255), unique=True, nullable=False)
     description = Column(Text)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)
@@ -41,6 +41,7 @@ class ModelManagementModel(Base):
     imodel_type = Column(IntEnum(ModelType), nullable=False)  # 模型类型，使用枚举类 ModelType
     name = Column(String(255), nullable=False)  # 模型名称
     description = Column(Text)
+    icon = Column(Text)
     config = Column(JSON)  # 模型配置，JSON类型
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 更新时间
     create_time = Column(DateTime, default=datetime.utcnow)  # 创建时间

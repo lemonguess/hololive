@@ -31,10 +31,11 @@ class UserInterface:
     async def create_user(session: AsyncSession,
                         username: str,
                         password: str,
-                        role: UserRoleType) -> UsersModel:
+                        role: UserRoleType,
+                        user_uuid: str = None) -> UsersModel:
         """创建新用户（自动事务管理）"""
         new_user = UsersModel(
-            user_uuid="571998a36f4b4ffeb2aaccc752d52bc4",
+            user_uuid=user_uuid if user_uuid else uuid.uuid4().hex,
             nickname=username,
             password=password,
             role=role,

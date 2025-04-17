@@ -1,5 +1,8 @@
 import asyncio
+
+import uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from starlette import status
 from contextlib import asynccontextmanager
 from utils.response_util import ResponseUtil
@@ -9,9 +12,6 @@ from core.providers.api import provider_router
 from core.imodels.api import imodel_router
 from tasks.startup_tasks import init_database, init_admin_user, init_default_provider
 from utils.log_util import LOGGING_CONF, Logger
-import uvicorn
-from middleware.jwt_middleware import JWTMiddleware
-from middleware.validation_middleware import ValidationMiddleware
 # 日志配置
 logger = Logger().get_logger()
 
@@ -28,10 +28,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# 添加 JWT 中间件
-# app.add_middleware(JWTMiddleware)
-# 添加参数校验中间件
-# app.add_middleware(ValidationMiddleware)
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    # 自定义错误返回格式
+    return ResponseUtil.error(
+        message='参数校验错误',
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+    )
 
 
 app.include_router(agent_router)

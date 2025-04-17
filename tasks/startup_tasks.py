@@ -3,7 +3,7 @@ from sqlalchemy import select
 from core.users.api import UserInterfaceInstance
 from models.model import BaseSupplierModel
 from utils import AsyncDatabaseManagerInstance
-from utils.encrypt_util import BcryptSecurity
+from middleware.auth import get_password_hash
 # from models.model import Role  # 导入Role模型
 from models.enums import UserRoleType
 from models.base import Base
@@ -19,7 +19,7 @@ async def init_database():
 async def init_admin_user():
     admin_username = app_config.admin.admin_username
     admin_password = app_config.admin.admin_username
-    _, hashed = BcryptSecurity.hash_password(admin_password)
+    hashed = get_password_hash(admin_password)
     async with AsyncDatabaseManagerInstance.get_session() as session:
         # 检查管理员是否存在
         admin_user = await UserInterfaceInstance.get_user_by_username(session, admin_username)
@@ -28,7 +28,8 @@ async def init_admin_user():
                 session,
                 username=admin_username,
                 password=hashed,
-                role=UserRoleType.ADMIN
+                role=UserRoleType.ADMIN,
+                user_uuid="571998a36f4b4ffeb2aaccc752d52bc4"
             )
             logger.info("Admin user initialized.")
 

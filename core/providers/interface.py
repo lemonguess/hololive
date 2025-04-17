@@ -60,10 +60,10 @@ class ProviderInterface:
         return new_user_provider
 
     @staticmethod
-    async def update_user_provider(session: AsyncSession, user_provider_uuid: str, api_key: str = None, base_url: str = None) -> Optional[UserSupplierModel]:
+    async def update_user_provider(session: AsyncSession, user_provider_uuid: str, api_key: str = None, base_url: str = None, user_uuid:str = None) -> Optional[UserSupplierModel]:
         """修改用户供应商信息"""
         result = await session.execute(
-            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid)
+            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid, UserSupplierModel.user_uuid==user_uuid)
         )
         user_provider = result.scalars().first()
         if user_provider:
@@ -73,18 +73,22 @@ class ProviderInterface:
                 user_provider.base_url = base_url
             await session.commit()
             await session.refresh(user_provider)
+        else:
+            raise ModuleNotFoundError("未查找到相关的实例")
         return user_provider
 
     @staticmethod
-    async def delete_user_provider(session: AsyncSession, user_provider_uuid: str) -> Optional[UserSupplierModel]:
+    async def delete_user_provider(session: AsyncSession, user_provider_uuid: str, user_uuid: str) -> Optional[UserSupplierModel]:
         """删除用户供应商信息"""
         result = await session.execute(
-            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid)
+            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid, UserSupplierModel.user_uuid == user_uuid)
         )
         user_provider = result.scalars().first()
         if user_provider:
             await session.delete(user_provider)
             await session.commit()
+        else:
+            raise ModuleNotFoundError("未查找到相关的实例")
         return user_provider
 
     @staticmethod

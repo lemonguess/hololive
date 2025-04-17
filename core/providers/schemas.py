@@ -20,7 +20,6 @@ class DeleteBaseProviderAPIParameters(BaseModel):
     provider_uuid: Optional[str]
 
 class AddUserProviderAPIParameters(BaseModel):
-    user_uuid: Optional[str]
     provider_uuid: Optional[str]
     api_key: Optional[str]
     base_url: Optional[str]

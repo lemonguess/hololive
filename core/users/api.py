@@ -2,7 +2,7 @@ import traceback
 from datetime import timedelta
 
 from fastapi import (
-    APIRouter
+    APIRouter, Request
 )
 import logging
 from starlette import status
@@ -14,7 +14,7 @@ from middleware.auth import (
     verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_password_hash
 )
 from core.users.schemas import UserTokenAPIParameters, AlterRoleAPIParameters
-
+from middleware.auth import require_roles
 logger = logging.getLogger(__name__)
 users_router = APIRouter(prefix="/users", tags=["users"])
 UserInterfaceInstance = UserInterface()
@@ -47,7 +47,7 @@ async def register_user(
                     "code": 0,
                     "msg": "User registered successfully.",
                     "data": {
-                        "user_id": new_user.id,
+                        "user_id": new_user.user_uuid,
                         "nickname": new_user.nickname,
                         "role": new_user.role.value,
                         "create_time": new_user.create_time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -66,6 +66,7 @@ async def register_user(
                 "data": None
             }
         )
+
 @users_router.post("/login")
 async def register_user(
         params: UserTokenAPIParameters
@@ -84,14 +85,14 @@ async def register_user(
                         )
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = create_access_token(
-                data={"username": user.nickname, "user_uuid": user.user_uuid}, expires_delta=access_token_expires
+                data={"username": user.nickname, "useruuid": user.user_uuid, "role": user.role.value}, expires_delta=access_token_expires
             )
             return JSONResponse(
                 status_code=status.HTTP_201_CREATED,
                 content={
                     "code": 0,
-                    "msg": "User registered successfully.",
-                    "data": {"access_token": access_token, "token_type": "bearer"}
+                    "msg": "User login successfully.",
+                    "data": {"access_token": access_token, "token_type": "bearer", "user_id": user.user_uuid}
                 },
                 headers= {"Authorization": "Bearer "+access_token}
             )
@@ -106,9 +107,11 @@ async def register_user(
                 "data": None
             }
         )
-# 用户管理接口：删除用户
+#
 @users_router.delete("/{user_id}")
-async def delete_user(user_id: str) -> JSONResponse:
+@require_roles(UserRoleType.ADMIN)
+async def delete_user(request: Request, user_id: str) -> JSONResponse:
+    """用户管理接口：删除用户"""
     try:
         async with AsyncDatabaseManagerInstance.get_session() as session:
             await UserInterfaceInstance.delete_user(session, user_id)
@@ -134,7 +137,10 @@ async def delete_user(user_id: str) -> JSONResponse:
 
 # 用户管理接口：更新用户权限
 @users_router.post("/alter_role")
-async def update_user_role(params: AlterRoleAPIParameters) -> JSONResponse:
+@require_roles(UserRoleType.ADMIN)
+async def update_user_role(
+        request: Request,
+        params: AlterRoleAPIParameters) -> JSONResponse:
     try:
         async with AsyncDatabaseManagerInstance.get_session() as session:
             # 通过 int 数值获取对应的 UserRoleType 枚举实例

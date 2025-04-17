@@ -10,14 +10,17 @@ class AddBaseModelAPIParameters(BaseModel):
     imodel_type: Optional[str]
     description: Optional[str] = None
     name: Optional[str]
+    icon: Optional[str] = None
     config: Optional[Dict[str, Any]] = None
 
 
-class UpdateBaseProviderAPIParameters(BaseModel):
-    provider_uuid: Optional[str]
+class UpdateBaseModelAPIParameters(BaseModel):
+    imodel_uuid: Optional[str]
+    imodel_type: Optional[str] = None
     icon: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
+    config: Optional[Dict[str, Any]] = None
 
 class DeleteBaseProviderAPIParameters(BaseModel):
     provider_uuid: Optional[str]

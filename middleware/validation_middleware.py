@@ -1,15 +1,19 @@
-from fastapi import Request
-from fastapi.exceptions import RequestValidationError
-from starlette import status
-from utils.response_util import ResponseUtil
+from fastapi import Request, HTTPException
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
-class ValidationMiddleware:
-    async def __call__(self, request: Request, call_next):
+class ValidationMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app):
+        super().__init__(app)
+
+    async def dispatch(self, request: Request, call_next):
         try:
             response = await call_next(request)
             return response
-        except RequestValidationError as exc:
-            return ResponseUtil.error(
-                message='参数校验错误',
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            )
+        except HTTPException as e:
+            if e.status_code == HTTP_422_UNPROCESSABLE_ENTITY:
+                raise HTTPException(
+                    status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="请求参数校验失败"
+                )
+            raise e

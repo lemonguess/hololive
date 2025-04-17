@@ -4,7 +4,7 @@ import uuid
 
 import aiohttp
 from fastapi import (
-    FastAPI, BackgroundTasks, APIRouter
+    FastAPI, BackgroundTasks, APIRouter, Request
 )
 import logging
 from starlette import status
@@ -21,6 +21,7 @@ live_router = APIRouter(prefix="/live", tags=["agents"])
 
 @live_router.post("/create")
 async def create_agent(
+        request: Request,
         params: CreateLiveAppAPIParameters
 ) -> JSONResponse:
     try:

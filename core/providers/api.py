@@ -3,19 +3,24 @@ import uuid
 
 import sqlalchemy
 from fastapi import (
-    FastAPI, BackgroundTasks, APIRouter
+    FastAPI, BackgroundTasks, APIRouter, Request
 )
 import logging
 from starlette import status
 from starlette.responses import JSONResponse
 from core.providers.interface import ProviderInterface
 from core.providers.schemas import *
+from models.enums import UserRoleType
 from utils import AsyncDatabaseManagerInstance
 from utils import Serializer
+from fastapi import Request
+from middleware.auth import require_roles, get_current_user_uuid
 logger = logging.getLogger(__name__)
 provider_router = APIRouter(prefix="/provider", tags=["providers"])
 @provider_router.post("/add_base_provider")
+@require_roles(UserRoleType.ADMIN)
 async def add_base_provider(
+        request: Request,
         params: AddBaseProviderAPIParameters
 ) -> JSONResponse:
     try:
@@ -51,7 +56,9 @@ async def add_base_provider(
 
 
 @provider_router.post("/update_base_provider")
+@require_roles(UserRoleType.ADMIN)
 async def update_base_provider(
+        request: Request,
         params: UpdateBaseProviderAPIParameters
 ) -> JSONResponse:
     try:
@@ -85,7 +92,9 @@ async def update_base_provider(
 
 
 @provider_router.post("/delete_base_provider")
+@require_roles(UserRoleType.ADMIN)
 async def delete_base_provider(
+        request: Request,
         params: DeleteBaseProviderAPIParameters
 ) -> JSONResponse:
     try:
@@ -116,13 +125,17 @@ async def delete_base_provider(
 
 
 @provider_router.post("/add_user_provider")
+@require_roles(UserRoleType.FORBID)
 async def add_user_provider(
+        request: Request,
         params: AddUserProviderAPIParameters
 ) -> JSONResponse:
     try:
+        user_uuid = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             user_provider = await ProviderInterface.add_user_provider(
                 session=session,
+                user_uuid=user_uuid,
                 **params.__dict__
             )
             return JSONResponse(
@@ -146,16 +159,20 @@ async def add_user_provider(
         )
 
 @provider_router.post("/update_user_provider")
+@require_roles(UserRoleType.FORBID)
 async def update_user_provider(
+        request: Request,
         params: UpdateUserProviderAPIParameters
 ) -> JSONResponse:
     try:
+        user_uuid = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             user_provider = await ProviderInterface.update_user_provider(
                 session=session,
                 user_provider_uuid=params.user_provider_uuid,
                 api_key=params.api_key,
-                base_url=params.base_url
+                base_url=params.base_url,
+                user_uuid=user_uuid
             )
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -188,13 +205,17 @@ async def update_user_provider(
 
 
 @provider_router.delete("/delete_user_provider")
+@require_roles(UserRoleType.FORBID)
 async def delete_user_provider(
+        request: Request,
         params: DeleteUserProviderAPIParameters
 ) -> JSONResponse:
     try:
+        user_uuid = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             await ProviderInterface.delete_user_provider(
                 session=session,
+                user_uuid=user_uuid,
                 user_provider_uuid=params.user_provider_uuid
             )
             return JSONResponse(
@@ -219,7 +240,9 @@ async def delete_user_provider(
 
 
 @provider_router.post("/get_base_providers_by_uuids")
+@require_roles(UserRoleType.FORBID)
 async def get_base_providers_by_uuids(
+        request: Request,
         params: SearchUserProviderAPIParameters
 ) -> JSONResponse:
     try:
@@ -250,7 +273,9 @@ async def get_base_providers_by_uuids(
 
 
 @provider_router.post("/get_user_providers_by_uuids")
+@require_roles(UserRoleType.FORBID)
 async def get_user_providers_by_uuids(
+        request: Request,
         params: SearchUserProviderAPIParameters
 ) -> JSONResponse:
     try:

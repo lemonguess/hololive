@@ -4,7 +4,7 @@ import uuid
 
 import aiohttp
 from fastapi import (
-    FastAPI, BackgroundTasks, APIRouter
+    FastAPI, BackgroundTasks, APIRouter, Request
 )
 import logging
 from starlette import status
@@ -20,6 +20,7 @@ agent_router = APIRouter(prefix="/agent", tags=["agents"])
 
 @agent_router.post("/create")
 async def agent_create(
+        request: Request,
         params: CreateAgentAPIParameters
 ) -> JSONResponse:
     try:
@@ -46,6 +47,7 @@ async def agent_create(
 
 @agent_router.post("/update")
 async def agent_update(
+        request: Request,
         params: UpdateAgentAPIParameters
 ) -> JSONResponse:
     try:
@@ -72,6 +74,7 @@ async def agent_update(
 
 @agent_router.post("/chat")
 async def agent_update(
+        request: Request,
         params: AgentChatAPIParameters
 ) -> JSONResponse:
     try:
