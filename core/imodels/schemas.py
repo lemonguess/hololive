@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 class AddBaseModelAPIParameters(BaseModel):
     user_provider_uuid: Optional[str]
-    imodel_type: Optional[str]
+    imodel_type: Optional[int]
     description: Optional[str] = None
     name: Optional[str]
     icon: Optional[str] = None
@@ -16,31 +16,11 @@ class AddBaseModelAPIParameters(BaseModel):
 
 class UpdateBaseModelAPIParameters(BaseModel):
     imodel_uuid: Optional[str]
-    imodel_type: Optional[str] = None
+    imodel_type: Optional[int] = None
     icon: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
     config: Optional[Dict[str, Any]] = None
 
-class DeleteBaseProviderAPIParameters(BaseModel):
-    provider_uuid: Optional[str]
-
-class AddUserProviderAPIParameters(BaseModel):
-    user_uuid: Optional[str]
-    provider_uuid: Optional[str]
-    api_key: Optional[str]
-    base_url: Optional[str]
-
-class UpdateUserProviderAPIParameters(BaseModel):
-    user_provider_uuid: Optional[str]
-    api_key: Optional[str] = None
-    base_url: Optional[str] = None
-
-class DeleteUserProviderAPIParameters(BaseModel):
-    user_provider_uuid: Optional[str]
-
-class SearchBaseProviderAPIParameters(BaseModel):
-    uuid_list: List[str]
-
-class SearchUserProviderAPIParameters(BaseModel):
-    uuid_list: List[str]
+class DeleteBaseModelAPIParameters(BaseModel):
+    imodel_uuid: Optional[str]

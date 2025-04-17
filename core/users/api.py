@@ -50,8 +50,8 @@ async def register_user(
                         "user_id": new_user.user_uuid,
                         "nickname": new_user.nickname,
                         "role": new_user.role.value,
-                        "create_time": new_user.create_time.strftime("%Y-%m-%d %H:%M:%S"),
-                        "update_time": new_user.update_time.strftime("%Y-%m-%d %H:%M:%S")
+                        "create_time": new_user.create_time,
+                        "update_time": new_user.update_time
                     }
                 }
             )

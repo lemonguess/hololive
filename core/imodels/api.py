@@ -1,7 +1,7 @@
 from core.imodels.interface import ModelInterface
 from core.imodels.schemas import *
 from middleware.auth import require_roles, get_current_user_uuid
-from models.enums import UserRoleType
+from models.enums import UserRoleType, ModelType
 from utils import AsyncDatabaseManagerInstance
 from utils import Serializer
 from utils.generalUtil import json_loads
@@ -30,7 +30,7 @@ async def add_base_model(
                 "user_provider_uuid": params.user_provider_uuid,
                 "user_uuid": user_uuid,
                 "imodel_uuid": uuid.uuid4().hex,
-                "imodel_type": params.icon,
+                "imodel_type": ModelType(params.imodel_type),  # 根据 params.imodel_type 获取 ModelType 实例
                 "icon": params.icon,
                 "description": params.description,
                 "name": params.name,
@@ -71,7 +71,7 @@ async def update_base_provider(
         async with AsyncDatabaseManagerInstance.get_session() as session:
             _model = await ModelInterface.update_base_model(
                 session=session,
-                imodel_uuid=params.provider_uuid,
+                imodel_uuid=params.imodel_uuid,
                 user_uuid=user_uuid,
                 name=params.name,
                 description=params.description,
@@ -98,18 +98,18 @@ async def update_base_provider(
             }
         )
 
-@imodel_router.post("/delete_base_model")
+@imodel_router.delete("/delete_base_model")
 @require_roles(UserRoleType.FORBID)
 async def delete_base_model(
         request: Request,
-        params: DeleteBaseProviderAPIParameters
+        params: DeleteBaseModelAPIParameters
 ) -> JSONResponse:
     try:
         user_uuid = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             provider = await ModelInterface.delete_base_model(
                 session=session,
-                imodel_uuid=params.provider_uuid,
+                imodel_uuid=params.imodel_uuid,
                 user_uuid=user_uuid
             )
             return JSONResponse(

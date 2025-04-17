@@ -1,7 +1,24 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, UniqueConstraint, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Text, DateTime as BaseDateTime, JSON, UniqueConstraint, ForeignKey, Table
 from datetime import datetime
 from models.base import Base
 from models.enums import UserRoleType, ModelType, IntEnum
+from sqlalchemy.types import TypeDecorator
+
+class DateTime(TypeDecorator):
+    """自定义 DateTime 类型，用于格式化时间字符串"""
+    impl = BaseDateTime
+    cache_ok = True  # 允许 SQLAlchemy 缓存该类型
+    def process_bind_param(self, value, dialect):
+        """写入数据库时的处理（保持 DateTime 类型）"""
+        if isinstance(value, str):  # 处理可能的字符串输入
+            return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+        return value  # 直接返回 datetime 对象
+    def process_result_value(self, value, dialect):
+        """从数据库读取时的处理（转换为格式化字符串）"""
+        if value is not None:
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        return None
+
 class UsersModel(Base):
     """用户管理表"""
     __tablename__ = 'users'
