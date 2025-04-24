@@ -1,13 +1,13 @@
 from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.model import BaseSupplierModel, UserSupplierModel
+from models.model import BaseProviderModel, UserProviderModel
 
 class AgentInterface:
     @staticmethod
-    async def add_base_provider(session: AsyncSession, provider_uuid: str, name: str, description: str = None, icon: str = None) -> Optional[BaseSupplierModel]:
+    async def add_base_provider(session: AsyncSession, provider_uuid: str, name: str, description: str = None, icon: str = None) -> Optional[BaseProviderModel]:
         """增加基础供应商"""
-        new_provider = BaseSupplierModel(
+        new_provider = BaseProviderModel(
             provider_uuid=provider_uuid,
             name=name,
             description=description,

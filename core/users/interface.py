@@ -32,10 +32,10 @@ class UserInterface:
                         username: str,
                         password: str,
                         role: UserRoleType,
-                        user_uuid: str = None) -> UsersModel:
+                        user_id: str = None) -> UsersModel:
         """创建新用户（自动事务管理）"""
         new_user = UsersModel(
-            user_uuid=user_uuid if user_uuid else uuid.uuid4().hex,
+            id=user_id if user_id else uuid.uuid4().hex,
             nickname=username,
             password=password,
             role=role,
@@ -52,7 +52,7 @@ class UserInterface:
         """原子化软删除操作"""
         await session.execute(
             update(UsersModel)
-            .where(UsersModel.user_uuid == user_id)
+            .where(UsersModel.id == user_id)
             .values(
                 is_deleted=1,
                 update_time=datetime.utcnow()
@@ -67,7 +67,7 @@ class UserInterface:
         """角色更新（使用ORM表达式）"""
         await session.execute(
             update(UsersModel)
-            .where(UsersModel.user_uuid == user_id)
+            .where(UsersModel.id == user_id)
             .values(
                 role=role,
                 update_time=datetime.utcnow()

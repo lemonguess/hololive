@@ -57,7 +57,18 @@ def generator_rules(rules_str: str, tokens, times):
         {"prompt_tokens": tokens.prompt_tokens if tokens else 0, "completion_tokens": tokens.completion_tokens if tokens else 0,
          "total_tokens": tokens.total_tokens if tokens else 0, "duration": get_timestamp() - times}, ensure_ascii=False)}
 
+def get_project_base_directory(*args):
+    PROJECT_BASE = os.path.abspath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                os.pardir,
+                # os.pardir,
+            )
+        )
 
+    if args:
+        return os.path.join(PROJECT_BASE, *args)
+    return PROJECT_BASE
 
 
 

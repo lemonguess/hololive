@@ -47,7 +47,7 @@ async def register_user(
                     "code": 0,
                     "msg": "User registered successfully.",
                     "data": {
-                        "user_id": new_user.user_uuid,
+                        "user_id": new_user.id,
                         "nickname": new_user.nickname,
                         "role": new_user.role.value,
                         "create_time": new_user.create_time,
@@ -85,14 +85,14 @@ async def register_user(
                         )
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = create_access_token(
-                data={"username": user.nickname, "useruuid": user.user_uuid, "role": user.role.value}, expires_delta=access_token_expires
+                data={"username": user.nickname, "useruuid": user.id, "role": user.role.value}, expires_delta=access_token_expires
             )
             return JSONResponse(
                 status_code=status.HTTP_201_CREATED,
                 content={
                     "code": 0,
                     "msg": "User login successfully.",
-                    "data": {"access_token": access_token, "token_type": "bearer", "user_id": user.user_uuid}
+                    "data": {"access_token": access_token, "token_type": "bearer", "user_id": user.id}
                 },
                 headers= {"Authorization": "Bearer "+access_token}
             )

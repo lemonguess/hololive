@@ -24,13 +24,13 @@ async def add_base_model(
 ) -> JSONResponse:
     """模型添加接口"""
     try:
-        user_uuid = get_current_user_uuid(request)
+        user_id = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             item = {
-                "user_provider_uuid": params.user_provider_uuid,
-                "user_uuid": user_uuid,
-                "imodel_uuid": uuid.uuid4().hex,
-                "imodel_type": ModelType(params.imodel_type),  # 根据 params.imodel_type 获取 ModelType 实例
+                "provider_id": params.provider_id,
+                "user_id": user_id,
+                "id": uuid.uuid4().hex,
+                "type": ModelType(params.type),  # 根据 params.imodel_type 获取 ModelType 实例
                 "icon": params.icon,
                 "description": params.description,
                 "name": params.name,
@@ -59,7 +59,7 @@ async def add_base_model(
             }
         )
 
-@imodel_router.post("/update_base_provider")
+@imodel_router.post("/update_base_model")
 @require_roles(UserRoleType.FORBID)
 async def update_base_provider(
         request: Request,
@@ -67,15 +67,16 @@ async def update_base_provider(
 ) -> JSONResponse:
     """模型修改接口"""
     try:
-        user_uuid = get_current_user_uuid(request)
+        user_id = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             _model = await ModelInterface.update_base_model(
                 session=session,
-                imodel_uuid=params.imodel_uuid,
-                user_uuid=user_uuid,
+                model_id=params.model_id,
+                user_id=user_id,
                 name=params.name,
                 description=params.description,
                 icon=params.icon,
+                _type=params.type,
                 config=json_loads(params.config)
             )
             return JSONResponse(
@@ -105,19 +106,20 @@ async def delete_base_model(
         params: DeleteBaseModelAPIParameters
 ) -> JSONResponse:
     try:
-        user_uuid = get_current_user_uuid(request)
+        user_id = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             provider = await ModelInterface.delete_base_model(
                 session=session,
-                imodel_uuid=params.imodel_uuid,
-                user_uuid=user_uuid
+                model_id=params.model_id,
+                user_id=user_id
             )
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content={
                     "code": 0,
                     "msg": "Base model deleted successfully.",
-                    "data": Serializer.serialize(provider)
+                    # "data": Serializer.serialize(provider)
+                    "data": "ok"
                 }
             )
     except Exception as e:

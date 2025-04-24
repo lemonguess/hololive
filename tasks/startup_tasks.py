@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
 from core.users.api import UserInterfaceInstance
-from models.model import BaseSupplierModel
+from models.model import ProviderModel
 from utils import AsyncDatabaseManagerInstance
 from middleware.auth import get_password_hash
 # from models.model import Role  # 导入Role模型
@@ -18,7 +18,7 @@ async def init_database():
 
 async def init_admin_user():
     admin_username = app_config.admin.admin_username
-    admin_password = app_config.admin.admin_username
+    admin_password = app_config.admin.admin_password
     hashed = get_password_hash(admin_password)
     async with AsyncDatabaseManagerInstance.get_session() as session:
         # 检查管理员是否存在
@@ -29,9 +29,24 @@ async def init_admin_user():
                 username=admin_username,
                 password=hashed,
                 role=UserRoleType.ADMIN,
-                user_uuid="571998a36f4b4ffeb2aaccc752d52bc4"
+                user_id="571998a36f4b4ffeb2aaccc752d52bc4"
             )
             logger.info("Admin user initialized.")
+    public_username = app_config.admin.public_username
+    public_password = app_config.admin.public_password
+    hashed = get_password_hash(public_password)
+    async with AsyncDatabaseManagerInstance.get_session() as session:
+        # 检查公共账号是否存在
+        admin_user = await UserInterfaceInstance.get_user_by_username(session, public_username)
+        if not admin_user:
+            await UserInterfaceInstance.create_user(
+                session,
+                username=public_username,
+                password=hashed,
+                role=UserRoleType.ADMIN,
+                user_id="aa4690c854b8462f93ef0f5bb3e3b921"
+            )
+            logger.info("Public user initialized.")
 
 async def init_default_provider():
     """初始化默认供应商数据"""
@@ -43,13 +58,14 @@ async def init_default_provider():
     async with AsyncDatabaseManagerInstance.get_session() as session:
         for provider in providers:
             existing_provider = await session.execute(
-                select(BaseSupplierModel).where(BaseSupplierModel.provider_uuid==provider['provider_uuid'])
+                select(ProviderModel).where(ProviderModel.id==provider['provider_uuid'])
             )
             if not existing_provider.first():
-                new_provider = BaseSupplierModel(
-                    provider_uuid=provider['provider_uuid'],
+                new_provider = ProviderModel(
+                    id=provider['provider_uuid'],
                     icon=provider.get('icon'),
                     name=provider['name'],
+                    name_zh=provider['name_zh'] if provider.get("name_zh") else provider['name'],
                     description=provider.get('description')
                 )
                 session.add(new_provider)

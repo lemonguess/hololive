@@ -16,7 +16,7 @@
 #### 1.3 技术选型：langchain
 1.基础供应商管理表
 - id => int,
-- provider_uuid => varchar(255),
+- supplier_uuid => varchar(255),
 - icon => text,
 - name => varchar(255),
 - description => text,
@@ -26,8 +26,8 @@
 2.用户的供应商管理
 - id => int,
 - user_uuid => varchar(255),
-- provider_uuid => varchar(255),
-- user_provider_uuid => varchar(255),
+- supplier_uuid => varchar(255),
+- user_supplier_uuid => varchar(255),
 - api_key => text,
 - update_time => datetime,
 - create_time => datetime,
@@ -35,7 +35,7 @@
 3.LLM 管理
 - id => int,
 - llm_uuid => varchar(255),
-- user_provider_uuid => varchar(255),
+- user_supplier_uuid => varchar(255),
 - user_uuid => varchar(255),
 - name => varchar(255),
 - max_tokens => int,

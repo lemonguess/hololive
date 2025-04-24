@@ -1,15 +1,15 @@
 import uuid
 from typing import Optional, List, Any, Coroutine, Sequence
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.model import BaseSupplierModel, UserSupplierModel
+from models.model import ProviderModel
 
 
 class ProviderInterface:
     @staticmethod
-    async def add_base_provider(session: AsyncSession, **kwargs) -> Optional[BaseSupplierModel]:
+    async def add_base_provider(session: AsyncSession, **kwargs) -> Optional[ProviderModel]:
         """增加基础供应商"""
-        new_provider = BaseSupplierModel(
+        new_provider = ProviderModel(
             **kwargs
         )
         session.add(new_provider)
@@ -18,10 +18,10 @@ class ProviderInterface:
         return new_provider
 
     @staticmethod
-    async def update_base_provider(session: AsyncSession, provider_uuid: str, name: str = None, description: str = None, icon: str = None) -> Optional[BaseSupplierModel]:
+    async def update_base_provider(session: AsyncSession, provider_id: str, name: str = None, description: str = None, icon: str = None) -> Optional[ProviderModel]:
         """修改基础供应商信息"""
         result = await session.execute(
-            select(BaseSupplierModel).where(BaseSupplierModel.provider_uuid == provider_uuid)
+            select(ProviderModel).where(ProviderModel.id == provider_id)
         )
         provider = result.scalars().first()
         if provider:
@@ -36,10 +36,10 @@ class ProviderInterface:
         return provider
 
     @staticmethod
-    async def delete_base_provider(session: AsyncSession, provider_uuid: str) -> Optional[BaseSupplierModel]:
+    async def delete_base_provider(session: AsyncSession, provider_id: str) -> Optional[ProviderModel]:
         """删除基础供应商信息"""
         result = await session.execute(
-            select(BaseSupplierModel).where(BaseSupplierModel.provider_uuid == provider_uuid)
+            select(ProviderModel).where(ProviderModel.id == provider_id)
         )
         provider = result.scalars().first()
         if provider:
@@ -48,61 +48,25 @@ class ProviderInterface:
         return provider
 
     @staticmethod
-    async def add_user_provider(session: AsyncSession, **kwargs) -> UserSupplierModel:
-        """增加用户供应商信息"""
-        new_user_provider = UserSupplierModel(
-            user_provider_uuid=uuid.uuid4().hex,
-            **kwargs
-        )
-        session.add(new_user_provider)
-        await session.commit()
-        await session.refresh(new_user_provider)
-        return new_user_provider
+    async def get_all_providers(session, page: int, page_size: int):
+        """
+        分页获取所有供应商
+        :param session: 数据库会话
+        :param page: 当前页码
+        :param page_size: 每页大小
+        :return: 供应商列表和总数
+        """
+        offset = (page - 1) * page_size
+        query = select(ProviderModel).offset(offset).limit(page_size)
+        count_query = select(func.count()).select_from(ProviderModel)
+        providers = await session.execute(query)
+        total = await session.scalar(count_query)
+        return providers.scalars().all(), total
 
     @staticmethod
-    async def update_user_provider(session: AsyncSession, user_provider_uuid: str, api_key: str = None, base_url: str = None, user_uuid:str = None) -> Optional[UserSupplierModel]:
-        """修改用户供应商信息"""
-        result = await session.execute(
-            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid, UserSupplierModel.user_uuid==user_uuid)
-        )
-        user_provider = result.scalars().first()
-        if user_provider:
-            if api_key:
-                user_provider.api_key = api_key
-            if base_url:
-                user_provider.base_url = base_url
-            await session.commit()
-            await session.refresh(user_provider)
-        else:
-            raise ModuleNotFoundError("未查找到相关的实例")
-        return user_provider
-
-    @staticmethod
-    async def delete_user_provider(session: AsyncSession, user_provider_uuid: str, user_uuid: str) -> Optional[UserSupplierModel]:
-        """删除用户供应商信息"""
-        result = await session.execute(
-            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid == user_provider_uuid, UserSupplierModel.user_uuid == user_uuid)
-        )
-        user_provider = result.scalars().first()
-        if user_provider:
-            await session.delete(user_provider)
-            await session.commit()
-        else:
-            raise ModuleNotFoundError("未查找到相关的实例")
-        return user_provider
-
-    @staticmethod
-    async def get_base_providers_by_uuids(session: AsyncSession, uuid_list: List[str]) -> Sequence[BaseSupplierModel]:
+    async def get_base_providers_by_uuids(session: AsyncSession, id_list: List[str]) -> Sequence[ProviderModel]:
         """根据uuid列表获取基础供应商信息"""
         result = await session.execute(
-            select(BaseSupplierModel).where(BaseSupplierModel.provider_uuid.in_(uuid_list))
-        )
-        return result.scalars().all()
-
-    @staticmethod
-    async def get_user_providers_by_uuids(session: AsyncSession, uuid_list: List[str]) -> Sequence[UserSupplierModel]:
-        """根据uuid列表获取用户供应商信息"""
-        result = await session.execute(
-            select(UserSupplierModel).where(UserSupplierModel.user_provider_uuid.in_(uuid_list))
+            select(ProviderModel).where(ProviderModel.id.in_(id_list))
         )
         return result.scalars().all()

@@ -1,28 +1,26 @@
 from enum import Enum
-from sqlalchemy import TypeDecorator, Integer
-
-class IntEnum(TypeDecorator):
-    """
-    整数枚举类型 主要用于状态等场景
-    """
-    impl = Integer
-    def __init__(self, enumtype, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._enumtype = enumtype
-    def process_bind_param(self, value, dialect):
-        """入库时调用此方法，返回的是枚举的value"""
-        return value.value
-    def process_result_value(self, value, dialect):
-        """从数据库加载到内存时的值，返回的一个枚举实例"""
-        return self._enumtype(value)
 
 class ModelType(Enum):
     """模型类型枚举类"""
-    TEXT = 1  # 文本模型
-    IMAGE = 2  # 图像模型
-    MULTIMODAL = 3  # 多模态模型
-    TTS = 4  # TTS模型
-    ASR = 5  # ASR模型
+    # TEXT = 1  # 文本模型
+    # IMAGE = 2  # 图像模型
+    # MULTIMODAL = 3  # 多模态模型
+    # TTS = 4  # TTS模型
+    # ASR = 5  # ASR模型
+    CHAT = 'chat'
+    EMBEDDING = 'embedding'
+    SPEECH2TEXT = 'speech2text'
+    IMAGE2TEXT = 'image2text'
+    RERANK = 'rerank'
+    TTS = 'tts'
+
+class LLMType(Enum):
+    CHAT = 'chat'
+    EMBEDDING = 'embedding'
+    SPEECH2TEXT = 'speech2text'
+    IMAGE2TEXT = 'image2text'
+    RERANK = 'rerank'
+    TTS = 'tts'
 
 
 class TransportType(Enum):
@@ -78,49 +76,43 @@ class ASRType(Enum):
 
 class LLMProvider(Enum):
     """大语言模型供应商枚举类"""
-    OPENAI = 1  # OpenAI
-    ANTHROPIC = 2  # Anthropic
-    AZURE_OPENAI = 3  # Azure OpenAI
-    GEMINI = 4  # Google Gemini
-    GOOGLE_CLOUD = 5  # Google Cloud
-    NVIDIA_API = 6  # Nvidia API Catalog
-    NVIDIA_NIM = 7  # Nvidia NIM
-    NVIDIA_TRITON = 8  # Nvidia Triton Inference Server
-    AWS_BEDROCK = 9  # AWS Bedrock
-    OPENROUTER = 10  # OpenRouter
-    COHERE = 11  # Cohere
-    TOGETHER_AI = 12  # together.ai
-    OLLAMA = 13  # Ollama
-    MISTRAL_AI = 14  # Mistral AI
-    GROQ = 15  # groqcloud
-    REPLICATE = 16  # Replicate
-    HUGGING_FACE = 17  # Hugging Face
-    XORBITS = 18  # Xorbits inference
-    ZHIPU = 19  # 智谱AI
-    BAICHUAN = 20  # 百川智能
-    XUNFEI = 21  # 讯飞星火
-    MINIMAX = 22  # Minimax
-    TONGYI = 23  # 通义千问
-    ERNIE = 24  # 文心一言
-    MOONSHOT = 25  # 月之暗面
-    TENCENT = 26  # 腾讯云
-    STEPFUN = 27  # 阶跃星辰
-    VOLCANO = 28  # 火山引擎
-    YI = 29  # 零一万物
-    QIHU_360 = 30  # 360智脑
-    AZURE_AI = 31  # Azure AI Studio
-    DEEPSEEK = 32  # DeepSeek
-    TENCENT_HUNYUAN = 33  # 腾讯混元
-    SILICONFLOW = 34  # SILICONFLOW
-    JINA_AI = 35  # Jina AI
-    CHATGLM = 36  # ChatGLM
-    XINFERENCE = 37  # Xinference
-    OPENLLM = 38  # OpenLLM
-    LOCALAI = 39  # LocalAI
-    OPENAI_COMPATIBLE = 40  # OpenAI API-Compatible
-    PERFX = 41  # PerfXCloud
-    LEPTON = 42  # Lepton AI
-    NOVITA = 43  # novita.ai
-    SAGEMAKER = 44  # Amazon Sagemaker
-    TEI = 45  # Text Embedding Inference
-    GPU_STACK = 46  # GPUStack
+    OPENAI = "OpenAI"
+    AZURE_OPENAI = "Azure-OpenAI"
+    ZHIPU_AI = "ZHIPU-AI"
+    TONGYI_QIANWEN = "Tongyi-Qianwen"
+    OLLAMA = "Ollama"
+    LOCALAI = "LocalAI"
+    XINFERENCE = "Xinference"
+    MOONSHOT = "Moonshot"
+    DEEPSEEK = "DeepSeek"
+    VOLC_ENGINE = "VolcEngine"
+    BAICHUAN = "BaiChuan"
+    MINIMAX = "MiniMax"
+    MISTRAL = "Mistral"
+    GEMINI = "Gemini"
+    BEDROCK = "Bedrock"
+    GROQ = "Groq"
+    OPENROUTER = "OpenRouter"
+    STEP_FUN = "StepFun"
+    NVIDIA = "NVIDIA"
+    LM_STUDIO = "LM-Studio"
+    OPENAI_API_COMPATIBLE = "OpenAI-API-Compatible"
+    VLLM = "VLLM"
+    COHERE = "Cohere"
+    LEPTON_AI = "LeptonAI"
+    TOGETHER_AI = "TogetherAI"
+    PERFX_CLOUD = "PerfXCloud"
+    UPSTAGE = "Upstage"
+    NOVITA_AI = "novita.ai"
+    SILICONFLOW = "SILICONFLOW"
+    PPIO = "PPIO"
+    YI_01_AI = "01.AI"
+    REPLICATE = "Replicate"
+    TENCENT_HUNYUAN = "Tencent Hunyuan"
+    XUNFEI_SPARK = "XunFei Spark"
+    BAIDU_YIYAN = "BaiduYiyan"
+    ANTHROPIC = "Anthropic"
+    GOOGLE_CLOUD = "Google Cloud"
+    HUGGING_FACE = "HuggingFace"
+    GPUSTACK = "GPUStack"
+    MODEL_SCOPE = "ModelScope"

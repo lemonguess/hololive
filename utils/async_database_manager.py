@@ -18,7 +18,7 @@ class AsyncDatabaseManager:
         db_type = db_config.db_type
         if db_type == 'sqlite':
             database = db_config.db_name
-            engine_url = f"sqlite+aiosqlite:///{database}"
+            engine_url = f"sqlite+aiosqlite:///{database}.db"
         elif db_type == 'mysql':
             user = db_config.db_user
             password = db_config.db_password

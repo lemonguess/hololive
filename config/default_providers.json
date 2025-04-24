@@ -1,8 +1,282 @@
 [
   {
-    "name": "硅基流动",
-    "provider_uuid": "3ba943829bb841d498d034ea3085482f",
+    "name": "OPENAI",
+    "name_zh": "OpenAI",
+    "provider_uuid": "a1f5b9d23e4c4f9a8b6f12e9c3d4f5a6",
+    "icon": "",
+    "description": "OpenAI 成立于 2015 年，是美国知名的人工智能研究与产品公司，旗下拥有 GPT-4、GPT-3.5、DALL·E、Whisper 等一系列领先模型。其 GPT-4 模型具备多模态输入能力，可接受文本与图像输入并生成高质量文本输出，广泛应用于对话生成、内容创作、编程辅助、数据分析等场景。OpenAI 通过 API 向全球开发者开放模型调用，并与微软 Azure 深度合作，将 AI 能力嵌入云服务与生产力工具中，推动智能化转型与创新落地。"
+  },
+  {
+    "name": "AZURE_OPENAI",
+    "name_zh": "Azure OpenAI 服务",
+    "provider_uuid": "b2e6c0f34d5a4e2b9c7d23f0d4e5f6b7",
+    "icon": "",
+    "description": "Azure OpenAI 服务是微软在 Azure 云平台上提供的 OpenAI 模型托管与推理服务，支持 GPT-4、GPT-3.5-Turbo、DALL·E 3、Whisper 等多种模型调用。依托 Azure 的合规、安全和可扩展能力，为企业级用户提供低延迟、高并发的 AI 推理方案，并且支持通过 Azure Portal、REST API、CLI 与 SDK 快速部署与管理，使企业能够在现有生态中无缝集成先进的生成式 AI 能力。"
+  },
+  {
+    "name": "ZHIPU_AI",
+    "name_zh": "智谱AI",
+    "provider_uuid": "c3d7e1a45f6b4e3c8d9e34f1a2b3c4d5",
+    "icon": "",
+    "description": "智谱AI（北京智谱华章科技有限公司）由清华大学团队于 2019 年创立，核心产品包括 GLM 系列预训练大模型和 ChatGLM 对话系统。GLM-130B、GLM-4 等模型在自然语言理解和生成上具备出色表现，已在金融、教育、政务、医疗等领域进行深度应用。智谱AI 坚持开源与商业化并行，提供模型微调、私有化部署与 API 服务，致力于让国产大模型技术更安全可靠、更易落地。"
+  },
+  {
+    "name": "TONGYI_QIANWEN",
+    "name_zh": "通义千问",
+    "provider_uuid": "d4f8a2b56c7d4f4e9a0b45c2d3e4f6a7",
+    "icon": "",
+    "description": "通义千问是阿里云于 2023 年推出的大型多模态语言模型，支持文本、图像、音频、视频等多种输入形式，并在问答、摘要、翻译、创作等场景中展现强大能力。依托阿里云千帆大模型平台，通义千问可进行模型微调、专属定制和高并发推理，面向政务、金融、教育、制造等行业提供 OpenAI 兼容 API 接入和一站式解决方案，助力企业快速构建智能化应用。"
+  },
+  {
+    "name": "OLLAMA",
+    "name_zh": "Ollama",
+    "provider_uuid": "e5g9b3c67d8e4f5f0a1c56d3e4f7a8b9",
+    "icon": "",
+    "description": "Ollama 是一个本地化大模型管理与推理平台，支持将多种开源模型（如 LLaMA、Alpaca、Vicuna 等）以容器方式部署到本地或私有云环境，保证数据安全与隐私。Ollama 提供统一的 CLI 与 HTTP API 接口，支持模型版本管理、量化选择及性能监控，帮助开发者在本地环境中高效运行与测试各类大模型。"
+  },
+  {
+    "name": "LOCALAI",
+    "name_zh": "LocalAI",
+    "provider_uuid": "f6h0c4d78e9f5a6a1b2d67e4f8a9b0c1",
+    "icon": "",
+    "description": "LocalAI 是一个开源的本地化 AI 推理框架，兼容 OpenAI API，允许开发者在本地或私有基础设施上运行各类大模型，如 LLaMA、Mistral 等。其特点包括低延迟、本地数据处理、完全开源以及灵活的后端插件机制，支持通过 RESTful API 或 gRPC 调用，实现对 GPU/CPU 的高效利用。"
+  },
+  {
+    "name": "XINFERENCE",
+    "name_zh": "Xinference",
+    "provider_uuid": "g7i1d5e89f0g6b7b2c3e78f5a0b1c2d3",
+    "icon": "",
+    "description": "Xinference（Xorbits Inference）是一款开源的分布式大模型推理平台，可在云端或本地环境中简化各种模型的部署与调用。支持 LLM、多模态模型、语音识别模型等，提供 OpenAI 兼容 RESTful API、RPC、CLI 及 Web UI 接口，并支持分布式集群调度、异构硬件加速与模型监控，助力开发者快速上线高性能 AI 服务。"
+  },
+  {
+    "name": "MOONSHOT",
+    "name_zh": "Moonshot",
+    "provider_uuid": "h8j2e6f90g1h7c8c3d4f89g6b1c2d3e4",
+    "icon": "",
+    "description": "Moonshot AI 是一家专注于高质量对话与创作的 AI 初创公司，提供具备多轮对话、情感理解和场景适应能力的定制化大模型服务。其产品支持客户自有数据微调，可部署于私有云和公有云，并通过 SDK 与 API 提供灵活集成方案，覆盖智能客服、内容创作、企业助手等应用。"
+  },
+  {
+    "name": "DEEPSEEK",
+    "name_zh": "DeepSeek",
+    "provider_uuid": "i9k3f7g01h2i8d9d4e5f90h7c2d3e4f5",
+    "icon": "",
+    "description": "DeepSeek 是一家专注于搜索与推荐场景的 AI 公司，将大模型与向量检索、知识图谱结合，提供基于行业知识库的问答、摘要与搜索增强服务。DeepSeek 平台支持一站式数据接入、知识抽取、向量检索服务及基于 LLM 的上层应用构建，助力金融、法务、医疗等行业提升信息检索与洞察能力。"
+  },
+  {
+    "name": "VOLC_ENGINE",
+    "name_zh": "火山引擎",
+    "provider_uuid": "j0l4g8h12i3j9e0e5f6g01i8d3e4f5g6",
+    "icon": "",
+    "description": "火山引擎是字节跳动旗下的云服务与 AI 平台，整合内容及算法基因，提供 AIGC 能力与基础设施。其大模型服务包含“豆包”系列模型，支持千亿级 Token 的日均处理量与低成本推理，同时可在营销、内容分发、智能创作、数据洞察等多场景中应用，助力企业实现智能化增长。"
+  },
+  {
+    "name": "BAICHUAN",
+    "name_zh": "百川智能",
+    "provider_uuid": "k1m5h9i23j4k0f1f6g7h12j9e4f5g6h7",
+    "icon": "",
+    "description": "百川智能（Baichuan AI）成立于 2023 年，由搜狗创始人王小川发起，致力于打造开放可商用的大规模预训练模型。其 Baichuan-7B、Baichuan2-7B 等系列模型在中英双语及多语言基准测试中表现领先，并提供开源与商用许可。百川智能通过云 API 和 SDK 为开发者提供模型调用、微调和部署服务，助力行业创新。"
+  },
+  {
+    "name": "MINIMAX",
+    "name_zh": "MiniMax",
+    "provider_uuid": "l2n6i0j34k5l1g2g7h8i23k0f5g6h7i8",
+    "icon": "",
+    "description": "MiniMax AI 是一家专注于高效小模型推理的初创公司，通过知识蒸馏与压缩技术，将大型预训练模型精炼为小、快、低成本的模型，适用于边缘设备和移动端应用，支持 NLP、CV 及多模态场景，并提供易于集成的 RESTful API 及开源 SDK。"
+  },
+  {
+    "name": "MISTRAL",
+    "name_zh": "Mistral AI",
+    "provider_uuid": "m3o7j1k45l6m2h3h8i9j34l1g6h7i8j9",
+    "icon": "",
+    "description": "Mistral AI 总部位于巴黎，推出了多款开源高性能大语言模型（如 Mistral-7B、Mixtral-8x7B 等），在同规模模型中具有领先的推理性能和生成质量。其模型支持英、法、中等多语言，提供社区版和企业版，可通过 API、Docker 容器或本地部署方式使用，广泛应用于科研和工业级场景。"
+  },
+  {
+    "name": "GEMINI",
+    "name_zh": "Gemini",
+    "provider_uuid": "n4p8k2l56m7n3i4i9j0k45m2h7i8j9k0",
+    "icon": "",
+    "description": "Gemini 是 Google DeepMind 推出的多模态大模型系列，包括 Gemini Pro、Ultra、Nano 等版本。Gemini 模型具备强大的自然语言理解、长文档处理与多模态生成能力，并与 Google Cloud AI 平台深度集成，为开发者提供可扩展的 API 与定制化解决方案。"
+  },
+  {
+    "name": "BEDROCK",
+    "name_zh": "Amazon Bedrock",
+    "provider_uuid": "o5q9l3m67n8o4j5j0k1l56n3i8j9k0l1",
+    "icon": "",
+    "description": "Amazon Bedrock 是 AWS 提供的托管型生成式 AI 服务，内置 Anthropic 的 Claude、Meta 的 Llama 2、AI21 的 Jurassic-2、Stability AI 的 Stable Diffusion 等多家厂商模型，支持按需调用与微调，结合 AWS 的安全、监控与部署能力，为企业提供一站式 AI 平台。"
+  },
+  {
+    "name": "GROQ",
+    "name_zh": "Groq",
+    "provider_uuid": "p6r0m4n78o9p5k6k1l2m67o4j9k0l1m2",
+    "icon": "",
+    "description": "Groq 提供专用 AI 推理硬件与软件栈，擅长超低延迟、大吞吐的推理服务。其硬件可加速大语言模型推理，同时提供 GroqWare 软件与 Groq API，帮助用户无缝地将现有模型移植到 Groq 硬件上，实现高效的企业级 AI 应用部署。"
+  },
+  {
+    "name": "OPENROUTER",
+    "name_zh": "OpenRouter",
+    "provider_uuid": "q7s1n5o89p0q6l7l2m3n78p5k0l1m2n3",
+    "icon": "",
+    "description": "OpenRouter 是一个开源的 LLM 路由层，支持将用户请求智能分配到多家模型提供商（如 OpenAI、Anthropic、Cohere、自己部署的模型等），实现负载均衡、降级策略与成本优化，帮助开发者构建可扩展、高可用的生成式 AI 服务。"
+  },
+  {
+    "name": "STEP_FUN",
+    "name_zh": "StepFun",
+    "provider_uuid": "r8t2o6p90q1r7m8m3n4o89q6l1m2n3o4",
+    "icon": "",
+    "description": "StepFun AI 是一家提供大模型流水线化执行的服务商，支持将复杂任务拆分为多阶段流水线，通过函数调用、工具集成与中间状态管理，高效地执行具有业务逻辑的生成式任务，广泛应用于数据分析、工作流自动化与智能助理场景。"
+  },
+  {
+    "name": "NVIDIA",
+    "name_zh": "NVIDIA",
+    "provider_uuid": "s9u3p7q01r2s8n9n4o5p90r7m2n3o4p5",
+    "icon": "",
+    "description": "NVIDIA 通过其 NeMo 和 Triton 推理服务器提供一整套大模型训练与推理解决方案，支持来自多家厂商的开源与商用模型，优化 GPU 性能并提供分布式训练与推理架构。NVIDIA AI Enterprise 软件套件结合云端与本地部署，满足金融、医疗、制造等行业的高性能需求。"
+  },
+  {
+    "name": "LM_STUDIO",
+    "name_zh": "LM Studio",
+    "provider_uuid": "t0v4q8r12s3t9o0o5p6q01s8n3o4p5q6",
+    "icon": "",
+    "description": "LM Studio 是一个开源的桌面化大模型管理工具，支持 Windows、macOS 和 Linux，集成了模型下载、快速量化、推理测试和性能监控功能。用户可一键下载从社区到商业模型，并通过可视化界面进行 API 调用和性能调优。"
+  },
+  {
+    "name": "OPENAI_API_COMPATIBLE",
+    "name_zh": "OpenAI API 兼容",
+    "provider_uuid": "u1w5r9s23t4u0p1p6q7r12t9o4p5q6r7",
+    "icon": "",
+    "description": "OpenAI API 兼容平台指各类本地或云端服务实现与 OpenAI API 接口的完全兼容，包括 Restful 调用、Function Calling、Stream 模式等。此类平台使开发者无需改动现有代码，即可将调用路由至自建或第三方模型提供商。"
+  },
+  {
+    "name": "VLLM",
+    "name_zh": "vLLM",
+    "provider_uuid": "v2x6s0t34u5v1q2q7r8s23u0p5q6r7s8",
+    "icon": "",
+    "description": "vLLM 是一款高效的开源大模型推理引擎，基于异步流水线设计，支持大批量请求处理、低延迟推理和多模型并行执行。其架构可无缝接入 PyTorch 和 Transformers 模型，并通过动态批处理显著提升 GPU 利用率和吞吐量。"
+  },
+  {
+    "name": "COHERE",
+    "name_zh": "Cohere",
+    "provider_uuid": "w3y7t1u45v6w2r3r8s9t34v1q6r7s8t9",
+    "icon": "",
+    "description": "Cohere 是加拿大初创公司，提供大型语言模型 API 服务，涵盖文本生成、文本理解、嵌入检索与分类等能力。Cohere 的 Command、Generate 向 API 用户开放灵活的 prompt 配置，并支持定制化微调与私有化部署，覆盖企业智能客服、内容创作与搜索增强场景。"
+  },
+  {
+    "name": "LEPTON_AI",
+    "name_zh": "Lepton AI",
+    "provider_uuid": "x4z8u2v56w7x3s4s9t0u45w2r7s8t9u0",
+    "icon": "",
+    "description": "Lepton AI 是一家新兴 AI 平台，提供可配置的微模型与大模型推理服务，支持低资源环境下的高效运行。通过自动模型压缩与分片技术，Lepton AI 可将主流大模型裁剪至小模型，并提供按需扩容的云端 API，适用于实时客服、边缘设备等场景。"
+  },
+  {
+    "name": "TOGETHER_AI",
+    "name_zh": "TogetherAI",
+    "provider_uuid": "y5a9v3w67x8y4t5t0u1v56x3s8t9u0v1",
+    "icon": "",
+    "description": "TogetherAI 是一家致力于开源大模型基础设施的公司，提供基于 PyTorch 和 HuggingFace 的完善推理框架、模型压缩工具和集群调度方案。TogetherAI 开发的 Triton-Next 与 Ray 集成，支持可扩展的分布式推理与自助式模型管理。"
+  },
+  {
+    "name": "PERFX_CLOUD",
+    "name_zh": "PerfXCloud",
+    "provider_uuid": "z6b0w4x78y9z5u6u1v2w67y4t9u0v1w2",
+    "icon": "",
+    "description": "PerfXCloud 专注于 AI 推理性能优化，提供一站式性能测试、调优与监控平台。支持对 GPU、CPU、混合资源进行基准测试，自动生成最佳推理配置，并通过 API 提供性能预测与容量规划建议，帮助企业降低推理成本、保证 SLA。"
+  },
+  {
+    "name": "UPSTAGE",
+    "name_zh": "Upstage",
+    "provider_uuid": "a7c1x5y89z0a6v7v2w3x78z5u0v1w2x3",
+    "icon": "",
+    "description": "Upstage 是韩国初创 AI 公司，提供医疗、制造、教育等行业专用大模型解决方案。其平台具备数据管理、模型训练与部署一体化能力，并支持行业知识库集成与模型微调，帮助企业快速构建符合行业合规要求的智能应用。"
+  },
+  {
+    "name": "NOVITA_AI",
+    "name_zh": "Novita.ai",
+    "provider_uuid": "b8d2y6z90a1b7w8w3x4y89a6v1w2x3y4",
+    "icon": "",
+    "description": "Novita.ai 是一家提供产业大模型定制与托管服务的公司，擅长将开源大模型与行业知识结合，提供法律、金融、零售等场景解决方案。其平台支持端到端数据标注、模型微调、推理部署与 A/B 测试，助力企业实现高效智能化上云。"
+  },
+  {
+    "name": "SILICONFLOW",
+    "name_zh": "硅基流动",
+    "provider_uuid": "c9e3z7a01b2c8x9x4y5z90b7w2x3y4z5",
     "icon": "data:image/png;base64,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",
-    "description": " silicon-junction-flow"
+    "description": "SiliconFlow 提供 AI 芯片与推理软件栈，专注于边缘与云端异构硬件加速。其 FlowRT 推理框架支持多种硬件后端，并通过 Graph Fusion、Kernel Tuning 等优化手段，提供高吞吐、低延迟的 AI 服务方案。"
+  },
+  {
+    "name": "PPIO",
+    "name_zh": "PPIO",
+    "provider_uuid": "d0f4a8b12c3d9y0y5z6a01c8x3y4z5a6",
+    "icon": "",
+    "description": "PPIO 是一个去中心化算力市场，提供按需租用 GPU、TPU 等 AI 训练与推理资源的平台。用户可通过智能合约方式预定算力，并获得统一的 API 调用接口，实现资源弹性扩缩容，降低模型训练与推理成本。"
+  },
+  {
+    "name": "YI_01_AI",
+    "name_zh": "01.AI",
+    "provider_uuid": "e1g5b9c23d4e0z1z6a7b12d9y4z5a6b7",
+    "icon": "",
+    "description": "01.AI（OneZero AI）是一家提供自动化 AI 开发平台的初创公司，汇聚多种开源模型、插件与工作流组件，通过可视化界面支持零代码调用与管道编排，并具有自动微调与持续集成能力，助力非专业开发者快速构建智能应用。"
+  },
+  {
+    "name": "REPLICATE",
+    "name_zh": "Replicate",
+    "provider_uuid": "f2h6c0d34e5f1x2x7b8c23e0z5a6b7c8",
+    "icon": "",
+    "description": "Replicate 是一个模型托管与运行平台，可一键部署开源机器学习模型并提供 API 访问。支持 Hugging Face、GitHub 等源的模型导入，并提供版本管理、性能监控与调用计费功能，让开发者无需运维即可调用多种视觉、语言与多模态模型。"
+  },
+  {
+    "name": "TENCENT_HUNYUAN",
+    "name_zh": "腾讯混元",
+    "provider_uuid": "g3i7d1e45f6g2y3y8c9d34f1a6b7c8d9",
+    "icon": "",
+    "description": "腾讯混元大模型是腾讯云推出的认知智能平台核心，具备跨模态理解与生成能力，可处理对话问答、代码编写、内容创作、数据分析等任务。混元大模型通过 API 与微服务架构无缝集成，支持模型微调与私有化部署，面向金融、零售、政务、教育等行业提供定制化解决方案。"
+  },
+  {
+    "name": "XUNFEI_SPARK",
+    "name_zh": "讯飞星火",
+    "provider_uuid": "h4j8e2f56g7h3z4z9d0e45g2b7c8d9e1",
+    "icon": "",
+    "description": "讯飞星火大模型是科大讯飞最新一代认知智能平台，拥有中文理解、知识问答、逻辑推理与多模态生成能力。星火模型广泛应用于智能客服、教育辅导、医疗辅助等场景，通过开放平台提供 SDK、API 和私有化部署选项，满足企业级安全合规需求。"
+  },
+  {
+    "name": "BAIDU_YIYAN",
+    "name_zh": "文心一言",
+    "provider_uuid": "i5k9f3g67h8i4a5a0e1f56h3c8d9e1f2",
+    "icon": "",
+    "description": "文心一言（ERNIE Bot）是百度推出的对话式大语言模型，现已迭代至 4.0 版本，支持跨模态交互与深度语义理解。文心一言可在文学创作、商业文案、编程辅助、知识问答等场景发挥优势，并通过百度智能云千帆大模型平台提供 API 接入与私有化部署服务。"
+  },
+  {
+    "name": "ANTHROPIC",
+    "name_zh": "Anthropic",
+    "provider_uuid": "j6l0g4h78i9j5b6b1f2g67i4d9e1f2g3",
+    "icon": "",
+    "description": "Anthropic 是美国 AI 安全研究机构与产品公司，推出了 Claude 系列对话模型（Claude 2、2.1、3），以强调模型可控性和安全性著称。Claude 模型支持稳定、高质量的对话与文本生成，并提供 API、微调与私有化部署选项，适用于客服、助理、研究等多场景。"
+  },
+  {
+    "name": "GOOGLE_CLOUD",
+    "name_zh": "谷歌云 AI",
+    "provider_uuid": "k7m1h5i89j0k6c7c2g3h78j5e1f2g3h4",
+    "icon": "",
+    "description": "Google Cloud AI 提供包括 Vertex AI 平台在内的 AI 服务，支持调用 PaLM 2、Gemini、Imagen、Duet Copilot 等大模型，并提供 AutoML、AI Builder、Feature Store 等一系列构建、训练与部署工具，帮助企业快速实现智能化应用。"
+  },
+  {
+    "name": "HUGGING_FACE",
+    "name_zh": "Hugging Face",
+    "provider_uuid": "l8n2i6j90k1l7d8d3h4i89k6f2g3h4i5",
+    "icon": "",
+    "description": "Hugging Face 是全球领先的开源 AI 社区与平台，提供 Transformers、Diffusers、datasets 等多款开源工具和模型仓库。其 Inference API 和 Hub 服务让开发者可轻松调用数千种预训练模型，包括 BERT、RoBERTa、Stable Diffusion、Whisper 等，同时支持模型微调与私有部署。"
+  },
+  {
+    "name": "GPUSTACK",
+    "name_zh": "GPUStack",
+    "provider_uuid": "m9o3j7k01l2m8e9e4i5j90l7g3h4i5j6",
+    "icon": "",
+    "description": "GPUStack 是一家提供 GPU 云服务器与 AI 基础设施管理工具的服务商，支持一键部署常见预训练模型并通过自研调度系统优化 GPU 利用率。提供集群监控、资源配额管理、按需扩缩容等功能，助力 AI 团队高效进行训练与推理。"
+  },
+  {
+    "name": "MODEL_SCOPE",
+    "name_zh": "ModelScope",
+    "provider_uuid": "n0p4k8l12m3n9f0f5j6k01m8h4i5j6k7",
+    "icon": "",
+    "description": "ModelScope 是由阿里巴巴达摩院推出的 AI 模型开发与部署平台，集成预训练模型库、开发套件、自动化微调与推理服务。支持一键部署 NLP、CV、多模态模型，并提供数据标注、模型评测、性能监控与可视化管理，适用于科研与企业级应用。"
   }
 ]
