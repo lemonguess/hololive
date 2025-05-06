@@ -137,5 +137,6 @@ class FileInfo(Base):
     file_name = Column(String(255), nullable=False)
     file_url = Column(String(255), nullable=False)
     user_id = Column(String(255), nullable=False)
+    obj_name = Column(String(255), nullable=False)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)

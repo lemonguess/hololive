@@ -76,11 +76,11 @@ class MinioConnection:
                 self.make_conn()
         return False
 
-    def get(self, bucket_name: str, file_name: str):
+    def get(self, bucket_name: str, object_name: str):
         content = None
         for i in range(10):
             try:
-                content = self.client.get_object(bucket_name, file_name)
+                content = self.client.get_object(bucket_name, object_name)
                 break
             except S3Error as se:
                 logger.error("File not exist")
@@ -100,10 +100,10 @@ class MinioConnection:
                 self.make_conn()
         return None
 
-    def delete(self, bucket_name: str, file_name: str):
+    def delete(self, bucket_name: str, obj_name: str):
         for i in range(10):
             try:
-                self.client.remove_object(bucket_name=bucket_name, object_name=file_name)
+                self.client.remove_object(bucket_name=bucket_name, object_name=obj_name)
                 return True
             except Exception as e:
                 logger.error("Minio server connect failed, Retry!")

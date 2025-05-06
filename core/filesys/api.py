@@ -1,5 +1,4 @@
 # coding: utf-8
-from urllib.request import Request
 from core.filesys.interface import FileInterface
 from middleware.auth import require_roles, get_current_user_uuid
 from utils import minio_client, AsyncDatabaseManagerInstance
@@ -10,7 +9,7 @@ from config import app_config
 import time
 import uuid
 from datetime import datetime
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Request
 from fastapi.responses import StreamingResponse
 from starlette import status
 from io import BytesIO
@@ -23,23 +22,23 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     try:
         out_dict = {
             "file_id": "",
-            "filename": "",
+            "file_name": "",
             "file_url": "",
             "file_type": "",
             "status": 0,
         }
         content = await file.read()
-        filename = file.filename
+        file_name = file.filename
         current_date = datetime.now()
         timestamp = int(time.time())
         file_id = uuid.uuid4().hex
-        obj_name = f"{current_date.year}/{current_date.month:02d}/{current_date.day:02d}/{file_id}_{timestamp}_{filename}"
+        obj_name = f"{current_date.year}/{current_date.month:02d}/{current_date.day:02d}/{file_id}_{timestamp}_{file_name}"
         result = minio_client.put(bucket_name=Bucket.public_bucket.value, file_name=obj_name, data=BytesIO(content))
         if not result:
             out_dict.update(
                 {
                     "status": 0,
-                    "filename": filename
+                    "file_name": file_name
                 }
             )
         else:
@@ -50,7 +49,8 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
                     session=session, **{
                         "bucket_name": Bucket.public_bucket.value,
                         "id": file_id,
-                        "filename": filename,
+                        "file_name": file_name,
+                        "obj_name": obj_name,
                         "file_url": file_url,
                         "user_id": user_id
                     }
@@ -58,9 +58,9 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
                 out_dict.update(
                     {
                         "file_id": file_id,
-                        "filename": filename,
+                        "file_name": file_name,
                         "file_url": file_url,
-                        "file_type": filename.split(".")[-1],
+                        "file_type": file_name.split(".")[-1],
                         "status": 1
                     }
                 )
@@ -72,21 +72,22 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         )
 
 
-@fileSys_router.get("/get/{fileId}")
+@fileSys_router.get("/get/{file_id}")
 @require_roles(UserRoleType.FORBID)
-async def get_file(request: Request, fileId: str):
+async def get_file(request: Request, file_id: str):
     try:
         async with AsyncDatabaseManagerInstance.get_session() as session:
             _result = await FileInterface.list(
                 session=session,
-                file_id_list=[fileId]
+                file_id_list=[file_id]
             )
             search_dict = dict()
             for file in _result:
                 search_dict.update(
                     {
                         "bucket_name": file.bucket_name,
-                        "filename": file.filename,
+                        "obj_name": file.obj_name,
+                        "file_name": file.file_name,
                     }
                 )
         if not search_dict:
@@ -94,7 +95,7 @@ async def get_file(request: Request, fileId: str):
                 message="文件未找到",
                 status_code=status.HTTP_200_OK,
             )
-        result = minio_client.get(bucket_name=search_dict["bucket_name"], file_name=search_dict["filename"])
+        result = minio_client.get(bucket_name=search_dict["bucket_name"], object_name=search_dict["obj_name"])
         if result:
             file_data = BytesIO(result.data)
             file_size = result.getheader("Content-Length")
@@ -102,7 +103,7 @@ async def get_file(request: Request, fileId: str):
                 file_data,
                 media_type="application/octet-stream",
                 headers={
-                    "Content-Disposition": f"attachment; filename={search_dict['filename']}",
+                    "Content-Disposition": f"attachment; filename={search_dict['file_name']}",
                     "Content-Length": file_size
                 }
             )
@@ -132,11 +133,10 @@ async def list_files(request: Request, params: FileListModel):
                 out_info.append(
                     {
                         "id": res.id,
-                        "file_id": res.file_id,
-                        "filename": res.filename,
+                        "file_name": res.file_name,
                         "file_url": res.file_url,
-                        "file_type": res.filename.split(".")[-1],
-                        "create_time": res.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+                        "file_type": res.file_name.split(".")[-1],
+                        "create_time": res.create_time
                     }
                 )
             return ResponseUtil.success(data=out_info, message="查询成功！")
@@ -161,19 +161,20 @@ async def update_file(request: Request, params: FileNameUploadModel):
                 search_dict.update(
                     {
                         "bucket_name": file.bucket_name,
-                        "filename": file.filename,
+                        "file_name": file.file_name,
                         "file_url": file.file_url,
+                        "obj_name": file.obj_name
                     }
                 )
-            obj_name_list = search_dict["file_url"].split("/")
-            obj_name = "/".join(obj_name_list[4:])
-            res = minio_client.rename_file(search_dict["bucket_name"], obj_name, params.fileName)
-
+            current_date = datetime.now()
+            new_obj_name = f"{current_date.year}/{current_date.month:02d}/{current_date.day:02d}/{file.id}_{int(time.time())}_{params.file_name}"
+            res = minio_client.rename_file(search_dict["bucket_name"], file.obj_name, new_obj_name)
             if res:
                 await FileInterface.update(
                     session=session,
                     file_id=params.file_id,
                     file_name=params.file_name,
+                    obj_name=new_obj_name
                 )
                 return ResponseUtil.success(data=params.file_id, message="重命名成功！")
             else:
@@ -188,37 +189,23 @@ async def update_file(request: Request, params: FileNameUploadModel):
         )
 
 
-@fileSys_router.delete("/delete/{fileId}")
+@fileSys_router.delete("/delete/")
 @require_roles(UserRoleType.FORBID)
-async def delete_file(request: Request, file_id: str):
+async def delete_file(request: Request, params: FileListModel):
     try:
+        user_id = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
             result = await FileInterface.list(
                 session=session,
-                file_id_list=[file_id]
+                file_id_list=params.file_id_list
             )
-            search_dict = dict()
             for file in result:
-                search_dict.update(
-                    {
-                        "bucket_name": file.bucket_name,
-                        "filename": file.filename,
-                        "file_url": file.file_url,
-                    }
-                )
-            result = minio_client.delete(bucket_name=search_dict["bucket_name"], file_name=search_dict["file_url"])
-            if result:
-                user_id = get_current_user_uuid(request)
-                await FileInterface.delete(session=session, model_id=file_id, user_id=user_id)
-                return ResponseUtil.success(
-                    data=file_id,
-                    message="文件删除成功",
-                )
-            else:
-                return ResponseUtil.error(
-                    message="文件删除失败",
-                    status_code=status.HTTP_200_OK,
-                )
+                minio_client.delete(bucket_name=file.bucket_name, obj_name=file.obj_name)
+                await FileInterface.delete(session=session, model_id=file.id, user_id=user_id)
+        return ResponseUtil.success(
+            data="",
+            message="文件删除成功",
+        )
     except Exception as e:
         return ResponseUtil.error(
             message=str(e),

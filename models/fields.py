@@ -17,7 +17,7 @@ class LLMConf(BaseModel):
 
 
 class FileListModel(BaseModel):
-    fileIds: List
+    file_id_list: List
 
 
 class FileNameUploadModel(BaseModel):

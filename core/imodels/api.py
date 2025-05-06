@@ -108,7 +108,7 @@ async def delete_base_model(
     try:
         user_id = get_current_user_uuid(request)
         async with AsyncDatabaseManagerInstance.get_session() as session:
-            provider = await ModelInterface.delete_base_model(
+            await ModelInterface.delete_base_model(
                 session=session,
                 model_id=params.model_id,
                 user_id=user_id
