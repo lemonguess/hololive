@@ -116,3 +116,7 @@ class LLMProvider(Enum):
     HUGGING_FACE = "HuggingFace"
     GPUSTACK = "GPUStack"
     MODEL_SCOPE = "ModelScope"
+
+class Bucket(Enum):
+    public_bucket = "ai-public-bucket"
+    private_bucket = "ai-private-bucket"

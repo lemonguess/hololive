@@ -20,7 +20,7 @@ import os
 import time
 import re
 from nltk.corpus import wordnet
-from api.utils.file_utils import get_project_base_directory
+from utils.generalUtil import get_project_base_directory
 
 
 class Dealer:
@@ -81,4 +81,5 @@ class Dealer:
 
 if __name__ == '__main__':
     dl = Dealer()
-    print(dl.dictionary)
+    # print(dl.dictionary)
+    print(dl.lookup("apple"))

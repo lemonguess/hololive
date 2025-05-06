@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+
+
 class OpenaiClientConf(BaseModel):
     api_key: Optional[str] = None
     api_base: Optional[str] = None
@@ -12,6 +14,35 @@ class LLMConf(BaseModel):
     top_p: float = 1.0
     # messages: list[dict] = []
 
+
+
+class FileListModel(BaseModel):
+    fileIds: List
+
+
+class FileNameUploadModel(BaseModel):
+    file_id: str
+    file_name: str
+
 class EmbeddingConf(BaseModel):
     model_name: str
     text: str
+
+class AgentMemory(BaseModel):
+    ...
+
+class AgentModel(BaseModel):
+    ...
+
+class AgentKnowledge(BaseModel):
+    ...
+
+class AgentWebSearch(BaseModel):
+    ...
+
+class AgentFileParser(BaseModel):
+    ...
+
+class AgentMCP(BaseModel):
+    ...
+

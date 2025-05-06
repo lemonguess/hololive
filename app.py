@@ -10,6 +10,7 @@ from core.agents.api import agent_router
 from core.users.api import users_router
 from core.providers.api import provider_router
 from core.imodels.api import imodel_router
+from core.filesys.api import fileSys_router
 from tasks.startup_tasks import init_database, init_admin_user, init_default_provider
 from utils.log_util import LOGGING_CONF, Logger
 # 日志配置
@@ -41,6 +42,7 @@ app.include_router(agent_router)
 app.include_router(users_router)
 app.include_router(provider_router)
 app.include_router(imodel_router)
+app.include_router(fileSys_router)
 
 if __name__ == "__main__":
     uvicorn.run(

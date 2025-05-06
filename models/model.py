@@ -127,5 +127,15 @@ class TTSConfigModel(Base):
     default_emotion = Column(String(255))
     default_language = Column(String(255))
     configs = Column(JSON)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.utcnow)
+
+class FileInfo(Base):
+    __tablename__ = 'file_info'
+    id = Column(String, primary_key=True, unique=True, nullable=False)
+    bucket_name = Column(String(255), nullable=False)
+    file_name = Column(String(255), nullable=False)
+    file_url = Column(String(255), nullable=False)
+    user_id = Column(String(255), nullable=False)
+    update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.utcnow)

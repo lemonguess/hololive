@@ -1,27 +1,29 @@
-from flow import chat_flow
+from models.fields import AgentMemory, AgentModel, AgentKnowledge, AgentWebSearch, AgentFileParser, AgentMCP
 
 
-def run_chat_memory_demo():
+class Agent:
     """
-    Run an interactive chat interface with memory retrieval.
-
-    Features:
-    1. Maintains a window of the 3 most recent conversation pairs
-    2. Archives older conversations with embeddings
-    3. Retrieves 1 relevant past conversation when needed
-    4. Total context to LLM: 3 recent pairs + 1 retrieved pair
+    智能体覆盖内容：
+    0.编排模块能力；
+    1.长期记忆模块；
+    2.知识库配置模块；
+    3.网络搜索模块；
+    4.文件解析能力；
+    5.MCP调用能力；
     """
+    def __init__(self,
+                 memory: AgentMemory,
+                 model: AgentModel,
+                 knowledge: AgentKnowledge,
+                 websearch: AgentWebSearch,
+                 file_parser: AgentFileParser,
+                 mcp: AgentMCP,
+                 ):
+        pass
 
-    print("=" * 50)
-    print("PocketFlow Chat with Memory")
-    print("=" * 50)
-    print("This chat keeps your 3 most recent conversations")
-    print("and brings back relevant past conversations when helpful")
-    print("Type 'exit' to end the conversation")
-    print("=" * 50)
-
-    # Run the chat flow
-    chat_flow.run({})
+def get_agent_client(agent_id) -> Agent:
+    # TODO 通过 agent_id，配置出完整的 agent 对象
+    return Agent()
 
 
 if __name__ == "__main__":
