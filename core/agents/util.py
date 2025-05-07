@@ -1,4 +1,4 @@
-from core.llms.get_chat_instance import get_chat_instance
+from core.llms.get_instance import get_chat_instance
 from core.websearch import web_search
 from models.enums import LLMProvider
 from models.fields import LLMConf

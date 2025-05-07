@@ -1,3 +1,5 @@
+import uuid
+
 from models.enums import UserRoleType, ModelType
 from models.base import Base
 from sqlalchemy.types import TypeDecorator
@@ -131,6 +133,7 @@ class TTSConfigModel(Base):
     create_time = Column(DateTime, default=datetime.utcnow)
 
 class FileInfo(Base):
+    """文件管理"""
     __tablename__ = 'file_info'
     id = Column(String, primary_key=True, unique=True, nullable=False)
     bucket_name = Column(String(255), nullable=False)
@@ -140,3 +143,64 @@ class FileInfo(Base):
     obj_name = Column(String(255), nullable=False)
     update_time = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     create_time = Column(DateTime, default=datetime.utcnow)
+
+
+class KnowledgeInfo(Base):
+    __tablename__ = 'knowledge_info'
+
+    id = Column(String(36), primary_key=True, unique=True, default=lambda: str(uuid.uuid4()))
+    knowledge_id = Column(String(64), nullable=False, comment="知识库唯一id")
+    file_name = Column(String(2000), nullable=False, comment="文件名称")
+    file_url = Column(String(2000), nullable=False, comment="文件url地址")
+    spliter_id = Column(String(64), nullable=False, comment="分割器唯一id")
+    document_id = Column(String(2000), index=True, nullable=False, comment="文件id")
+    chunk_size = Column(Integer, nullable=False, comment="分割字符数")
+    max_overlap = Column(Integer, default=0, comment="最大重叠字符数")
+    state = Column(Integer, nullable=False, comment="文件解析状态")
+    content_num = Column(Integer, default=0, comment="文件分段数")
+    file_size = Column(Integer, default=0, comment="文件总大小(MB)")
+    file_total_size = Column(Integer, default=0, comment="文件总字符数")
+    split_label = Column(String(1000), nullable=True, comment="分割标识符")
+    code_classify = Column(String(64), nullable=True, comment="代码分割语言")
+    split_type = Column(Integer, default=0, comment="文件分割格式")
+    create_time = Column(DateTime, default=datetime.utcnow, comment="创建时间")
+    update_time = Column(DateTime, default=datetime.utcnow,
+                         onupdate=datetime.utcnow, comment="更新时间")
+
+
+class EmbeddingModel(Base):
+    __tablename__ = 'embedding_info'
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    embedding_name = Column(String(256), index=True, nullable=False, comment="模型名称")
+    dim = Column(Integer, nullable=False, comment="模型维度")
+    collection_name = Column(String(256), nullable=False, comment="向量库名称")
+    create_time = Column(DateTime, default=datetime.utcnow, comment="创建时间")
+    update_time = Column(DateTime, default=datetime.utcnow,
+                         onupdate=datetime.utcnow, comment="更新时间")
+
+
+class Knowledge(Base):
+    __tablename__ = 'knowledge'
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    knowledge_id = Column(String(64), index=True, nullable=False, comment="知识库ID")
+    knowledge_name = Column(String(1000), nullable=False, comment="知识库名称")
+    knowledge_desc = Column(Text, nullable=True, comment="知识库描述")
+    file_num = Column(Integer, default=0, comment="文件总数")
+    file_size = Column(Integer, default=0, comment="总大小(MB)")
+    file_total_size = Column(Integer, default=0, comment="总字符数")
+    file_split_num = Column(Integer, default=0, comment="分段总数")
+    create_time = Column(DateTime, default=datetime.utcnow, comment="创建时间")
+    update_time = Column(DateTime, default=datetime.utcnow,
+                         onupdate=datetime.utcnow, comment="更新时间")
+
+
+class SpliterModel(Base):
+    __tablename__ = 'spliter'
+    id = Column(String(36), primary_key=True, unique=True, default=lambda: str(uuid.uuid4()))
+    spliter_id = Column(String(64), nullable=False, comment="分割器ID")
+    spliter = Column(String(128), nullable=False, comment="分割器类型")
+    create_time = Column(DateTime, default=datetime.utcnow, comment="创建时间")
+    update_time = Column(DateTime, default=datetime.utcnow,
+                         onupdate=datetime.utcnow, comment="更新时间")

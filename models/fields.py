@@ -12,7 +12,11 @@ class LLMConf(BaseModel):
     temperature: float = 0.7
     max_tokens: int = 2000
     top_p: float = 1.0
-    # messages: list[dict] = []
+class EmbeddingConf(BaseModel):
+    api_key: Optional[str]
+    base_url: Optional[str] = ""
+    model_name: str
+    text: str = ""
 
 
 
@@ -24,9 +28,7 @@ class FileNameUploadModel(BaseModel):
     file_id: str
     file_name: str
 
-class EmbeddingConf(BaseModel):
-    model_name: str
-    text: str
+
 
 class AgentMemory(BaseModel):
     ...
